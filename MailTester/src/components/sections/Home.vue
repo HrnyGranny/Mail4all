@@ -182,7 +182,7 @@ const selectMode = (mode) => {
   justify-content: space-between;
   gap: 24px;
 
-  background-color: var(--color-paper);
+  background-color: var(--color-bone);
 
   border-bottom: var(--border-width) solid var(--color-ink);
 

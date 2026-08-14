@@ -1,15 +1,21 @@
 <script setup>
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 
 import Navbar from '@/components/Navbar.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import AppFooter from '@/components/Footer.vue'
 import Home from '@/components/sections/Home.vue'
+import AboutUs from '@/components/sections/AboutUs.vue'
 
 const MOBILE_BREAKPOINT = 768
 
 const isMobile = ref(window.innerWidth < MOBILE_BREAKPOINT)
 const sidebarExpanded = ref(!isMobile.value)
+const selectedSection = ref('home')
+
+const currentView = computed(() => {
+  return selectedSection.value === 'about' ? AboutUs : Home
+})
 
 const toggleSidebar = () => {
   sidebarExpanded.value = !sidebarExpanded.value
@@ -44,7 +50,9 @@ onBeforeUnmount(() => {
   <div class="dashboard-container">
     <Sidebar
       :is-expanded="sidebarExpanded"
+      :selected-view="selectedSection"
       @toggle-sidebar="toggleSidebar"
+      @select-view="selectedSection = $event"
     />
 
     <Transition name="overlay">
@@ -70,7 +78,7 @@ onBeforeUnmount(() => {
 
       <main class="content-wrapper container-fluid">
         <div class="content-area">
-          <Home />
+          <component :is="currentView" />
         </div>
       </main>
 

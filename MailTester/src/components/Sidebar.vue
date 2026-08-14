@@ -4,14 +4,23 @@ defineProps({
     type: Boolean,
     default: true,
   },
+  selectedView: {
+    type: String,
+    default: 'home',
+  },
 })
 
-const emit = defineEmits(['toggle-sidebar', 'donate'])
+const emit = defineEmits(['toggle-sidebar', 'donate', 'select-view'])
 
 const handleNavigation = () => {
   if (window.innerWidth < 768) {
     emit('toggle-sidebar')
   }
+}
+
+const handleSectionChange = (view) => {
+  emit('select-view', view)
+  handleNavigation()
 }
 
 const handleDonate = () => {
@@ -28,11 +37,11 @@ const handleDonate = () => {
     }"
   >
     <!-- Brand -->
-    <RouterLink
-      to="/"
+    <button
+      type="button"
       class="bc-sidebar__brand"
       aria-label="Go to home"
-      @click="handleNavigation"
+      @click="handleSectionChange('home')"
     >
       <span
         class="bc-sidebar__logo"
@@ -46,14 +55,14 @@ const handleDonate = () => {
         class="bc-sidebar__brand-text"
       >
         <span class="bc-sidebar__eyebrow">
-          Temporary mail
+          The easy way to test your emails.
         </span>
 
         <span class="bc-sidebar__name">
           MailTester
         </span>
       </div>
-    </RouterLink>
+    </button>
 
     <!-- Main navigation -->
     <nav
@@ -70,12 +79,13 @@ const handleDonate = () => {
       <ul class="bc-sidebar__menu">
         <!-- Home -->
         <li class="bc-sidebar__item">
-          <RouterLink
-            to="/"
+          <button
+            type="button"
             class="bc-sidebar__link"
-            exact-active-class="bc-sidebar__link--active"
+            :class="{ 'bc-sidebar__link--active': selectedView === 'home' }"
             title="Home"
-            @click="handleNavigation"
+            aria-pressed="selectedView === 'home'"
+            @click="handleSectionChange('home')"
           >
             <span
               class="bc-sidebar__icon material-symbols-rounded"
@@ -98,17 +108,18 @@ const handleDonate = () => {
             >
               01
             </span>
-          </RouterLink>
+          </button>
         </li>
 
         <!-- About us -->
         <li class="bc-sidebar__item">
-          <RouterLink
-            to="/about"
+          <button
+            type="button"
             class="bc-sidebar__link"
-            active-class="bc-sidebar__link--active"
+            :class="{ 'bc-sidebar__link--active': selectedView === 'about' }"
             title="About us"
-            @click="handleNavigation"
+            aria-pressed="selectedView === 'about'"
+            @click="handleSectionChange('about')"
           >
             <span
               class="bc-sidebar__icon material-symbols-rounded"
@@ -131,7 +142,7 @@ const handleDonate = () => {
             >
               02
             </span>
-          </RouterLink>
+          </button>
         </li>
       </ul>
     </nav>
@@ -206,21 +217,6 @@ const handleDonate = () => {
       </button>
     </footer>
 
-    <!-- Mobile close button -->
-    <button
-      v-if="isExpanded"
-      type="button"
-      class="bc-sidebar__close"
-      aria-label="Close sidebar"
-      @click="emit('toggle-sidebar')"
-    >
-      <span
-        class="material-symbols-rounded is-bold"
-        aria-hidden="true"
-      >
-        close
-      </span>
-    </button>
   </aside>
 </template>
 
@@ -272,14 +268,19 @@ const handleDonate = () => {
 
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   gap: 12px;
 
   color: var(--color-ink);
+  background: transparent;
   text-decoration: none;
+  text-align: left;
 
+  border: none;
   border-bottom: var(--border-width) solid var(--color-ink);
 
   overflow: hidden;
+  cursor: pointer;
 
   transition:
     color var(--transition-normal),
@@ -412,6 +413,7 @@ const handleDonate = () => {
 
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   gap: 11px;
 
   color: var(--color-ink);
@@ -423,6 +425,7 @@ const handleDonate = () => {
   font-family: var(--font-body);
   text-align: left;
   text-decoration: none;
+  appearance: none;
 
   cursor: pointer;
 
@@ -805,14 +808,6 @@ const handleDonate = () => {
 }
 
 /* =========================================================
-   MOBILE CLOSE BUTTON
-   ========================================================= */
-
-.bc-sidebar__close {
-  display: none;
-}
-
-/* =========================================================
    LOW HEIGHT
    ========================================================= */
 
@@ -848,12 +843,13 @@ const handleDonate = () => {
 @media (max-width: 767.98px) {
   .bc-sidebar,
   .bc-sidebar--collapsed {
-    top: 0;
+    top: var(--navbar-height);
     left: -292px;
+    z-index: 1010;
 
     width: 280px;
-    height: 100vh;
-    height: 100dvh;
+    height: calc(100vh - var(--navbar-height));
+    height: calc(100dvh - var(--navbar-height));
 
     border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
 
@@ -868,47 +864,5 @@ const handleDonate = () => {
     left: 0;
   }
 
-  .bc-sidebar__close {
-    position: absolute;
-    top: 22px;
-    right: 15px;
-    z-index: 5;
-
-    width: 38px;
-    height: 38px;
-    padding: 0;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    color: #0e0e0c;
-    background-color: #f2eee5;
-
-    border: var(--border-width) solid #0e0e0c;
-    border-radius: 50%;
-
-    appearance: none;
-    cursor: pointer;
-
-    transition:
-      color var(--transition-fast),
-      background-color var(--transition-fast),
-      transform var(--transition-fast);
-  }
-
-  .bc-sidebar__close:hover {
-    color: #0e0e0c;
-    background-color: #ff5a1f;
-
-    transform: rotate(5deg);
-  }
-
-  .bc-sidebar__close .material-symbols-rounded {
-    width: 21px;
-    height: 21px;
-
-    font-size: 21px;
-  }
 }
 </style>
