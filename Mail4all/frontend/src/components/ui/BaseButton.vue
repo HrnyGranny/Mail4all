@@ -65,6 +65,10 @@ const props = defineProps({
 
 const emit = defineEmits(['click'])
 
+const isUnavailable = computed(() => {
+  return props.disabled || props.loading
+})
+
 const componentType = computed(() => {
   if (props.to) {
     return 'RouterLink'
@@ -78,31 +82,29 @@ const componentType = computed(() => {
 })
 
 const componentAttributes = computed(() => {
-  const isUnavailable = props.disabled || props.loading
-
   if (props.to) {
     return {
       to: props.to,
       'aria-label': props.ariaLabel,
-      'aria-disabled': isUnavailable ? 'true' : undefined,
-      tabindex: isUnavailable ? -1 : undefined,
+      'aria-disabled': isUnavailable.value ? 'true' : undefined,
+      tabindex: isUnavailable.value ? -1 : undefined,
     }
   }
 
   if (props.href) {
     return {
-      href: isUnavailable ? undefined : props.href,
+      href: isUnavailable.value ? undefined : props.href,
       target: props.target,
       rel: props.target === '_blank' ? 'noopener noreferrer' : undefined,
       'aria-label': props.ariaLabel,
-      'aria-disabled': isUnavailable ? 'true' : undefined,
-      tabindex: isUnavailable ? -1 : undefined,
+      'aria-disabled': isUnavailable.value ? 'true' : undefined,
+      tabindex: isUnavailable.value ? -1 : undefined,
     }
   }
 
   return {
     type: props.type,
-    disabled: isUnavailable,
+    disabled: isUnavailable.value,
     'aria-label': props.ariaLabel,
   }
 })
@@ -114,11 +116,13 @@ const buttonClasses = computed(() => [
     'bc-button--block': props.block,
     'bc-button--loading': props.loading,
     'bc-button--disabled': props.disabled,
+    'bc-button--unavailable': isUnavailable.value,
+    'bc-button--without-arrow': !props.arrow,
   },
 ])
 
 const handleClick = (event) => {
-  if (props.disabled || props.loading) {
+  if (isUnavailable.value) {
     event.preventDefault()
     event.stopPropagation()
     return
@@ -169,8 +173,9 @@ const handleClick = (event) => {
 <style scoped>
 .bc-button {
   --bc-button-bg: var(--color-chartreuse, #d8ff3d);
-  --bc-button-color: var(--color-ink, #0e0e0c);
-  --bc-button-icon-bg: var(--color-ink, #0e0e0c);
+  --bc-button-color: var(--color-on-accent, #0e0e0c);
+  --bc-button-border: var(--color-on-accent, #0e0e0c);
+  --bc-button-icon-bg: var(--color-on-accent, #0e0e0c);
   --bc-button-icon-color: var(--color-chartreuse, #d8ff3d);
 
   box-sizing: border-box;
@@ -183,24 +188,26 @@ const handleClick = (event) => {
 
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   gap: 14px;
 
   flex-shrink: 0;
+
+  color: var(--bc-button-color);
+  background-color: var(--bc-button-bg);
+
+  border: var(--border-width, 1.5px) solid var(--bc-button-border);
+  border-radius: var(--radius-pill, 999px);
+
   overflow: hidden;
   vertical-align: middle;
-
-  background-color: var(--bc-button-bg);
-  color: var(--bc-button-color);
-
-  border: var(--border-width, 1.5px) solid var(--color-ink, #0e0e0c);
-  border-radius: var(--radius-pill, 999px);
 
   font-family: var(--font-body, "Inter", system-ui, sans-serif);
   font-size: 0.9375rem;
   font-weight: 600;
   line-height: 1;
   letter-spacing: -0.005em;
+  text-align: left;
   text-decoration: none;
   white-space: nowrap;
 
@@ -216,13 +223,19 @@ const handleClick = (event) => {
     box-shadow var(--transition-normal, 220ms ease);
 }
 
+/* =========================================================
+   CONTENT ALIGNMENT
+   ========================================================= */
+
 .bc-button__label {
   min-width: 0;
   max-width: 100%;
   padding-bottom: 1px;
 
   display: block;
-  flex-shrink: 1;
+  flex: 1 1 auto;
+
+  text-align: left;
 
   overflow: hidden;
   text-overflow: ellipsis;
@@ -233,36 +246,52 @@ const handleClick = (event) => {
   width: 40px;
   height: 40px;
   flex: 0 0 40px;
+  margin-left: auto;
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  overflow: hidden;
-
-  background-color: var(--bc-button-icon-bg);
   color: var(--bc-button-icon-color);
+  background-color: var(--bc-button-icon-bg);
 
   border-radius: var(--radius-pill, 999px);
 
+  overflow: hidden;
+
   transition:
-    background-color var(--transition-fast, 160ms ease),
     color var(--transition-fast, 160ms ease),
+    background-color var(--transition-fast, 160ms ease),
     transform 200ms var(--ease-boldcase, ease);
 }
 
 .bc-button__icon svg {
   width: 18px;
   height: 18px;
-  display: block;
   flex-shrink: 0;
+
+  display: block;
 }
 
-/* Hover */
+/* Button without arrow */
 
-.bc-button:hover:not(.bc-button--disabled):not(.bc-button--loading) {
-  background-color: var(--color-ink, #0e0e0c);
+.bc-button--without-arrow {
+  padding-right: 28px;
+  justify-content: center;
+}
+
+.bc-button--without-arrow .bc-button__label {
+  flex: 0 1 auto;
+  text-align: center;
+}
+
+/* =========================================================
+   HOVER AND FOCUS
+   ========================================================= */
+
+.bc-button:hover:not(.bc-button--unavailable) {
   color: var(--color-chartreuse, #d8ff3d);
+  background-color: var(--color-on-accent, #0e0e0c);
 
   transform: translateY(-2px);
 
@@ -272,15 +301,14 @@ const handleClick = (event) => {
   );
 }
 
-.bc-button:hover:not(.bc-button--disabled):not(.bc-button--loading)
-  .bc-button__icon {
+.bc-button:hover:not(.bc-button--unavailable) .bc-button__icon {
+  color: var(--color-on-accent, #0e0e0c);
   background-color: var(--color-chartreuse, #d8ff3d);
-  color: var(--color-ink, #0e0e0c);
 
   transform: translateX(4px);
 }
 
-.bc-button:active:not(.bc-button--disabled):not(.bc-button--loading) {
+.bc-button:active:not(.bc-button--unavailable) {
   transform: translateY(0);
   box-shadow: none;
 }
@@ -290,65 +318,77 @@ const handleClick = (event) => {
   outline-offset: 3px;
 }
 
-/* Primary */
+/* =========================================================
+   PRIMARY
+   ========================================================= */
 
 .bc-button--primary {
   --bc-button-bg: var(--color-chartreuse, #d8ff3d);
-  --bc-button-color: var(--color-ink, #0e0e0c);
-  --bc-button-icon-bg: var(--color-ink, #0e0e0c);
+  --bc-button-color: var(--color-on-accent, #0e0e0c);
+  --bc-button-border: var(--color-on-accent, #0e0e0c);
+  --bc-button-icon-bg: var(--color-on-accent, #0e0e0c);
   --bc-button-icon-color: var(--color-chartreuse, #d8ff3d);
 }
 
-/* Dark */
+/* =========================================================
+   DARK
+   ========================================================= */
 
 .bc-button--dark {
-  --bc-button-bg: var(--color-ink, #0e0e0c);
+  --bc-button-bg: var(--color-on-accent, #0e0e0c);
   --bc-button-color: var(--color-chartreuse, #d8ff3d);
+  --bc-button-border: var(--color-on-accent, #0e0e0c);
   --bc-button-icon-bg: var(--color-chartreuse, #d8ff3d);
-  --bc-button-icon-color: var(--color-ink, #0e0e0c);
+  --bc-button-icon-color: var(--color-on-accent, #0e0e0c);
 }
 
-.bc-button--dark:hover:not(.bc-button--disabled):not(.bc-button--loading) {
+.bc-button--dark:hover:not(.bc-button--unavailable) {
+  color: var(--color-on-accent, #0e0e0c);
   background-color: var(--color-chartreuse, #d8ff3d);
-  color: var(--color-ink, #0e0e0c);
 }
 
-.bc-button--dark:hover:not(.bc-button--disabled):not(.bc-button--loading)
-  .bc-button__icon {
-  background-color: var(--color-ink, #0e0e0c);
+.bc-button--dark:hover:not(.bc-button--unavailable) .bc-button__icon {
   color: var(--color-chartreuse, #d8ff3d);
+  background-color: var(--color-on-accent, #0e0e0c);
 }
 
-/* Paper */
+/* =========================================================
+   PAPER
+   ========================================================= */
 
 .bc-button--paper {
   --bc-button-bg: var(--color-bone, #fbf8f1);
   --bc-button-color: var(--color-ink, #0e0e0c);
+  --bc-button-border: var(--color-ink, #0e0e0c);
   --bc-button-icon-bg: var(--color-ink, #0e0e0c);
   --bc-button-icon-color: var(--color-bone, #fbf8f1);
 }
 
-/* Danger */
+/* =========================================================
+   DANGER
+   ========================================================= */
 
 .bc-button--danger {
   --bc-button-bg: var(--color-danger, #e5483f);
   --bc-button-color: #ffffff;
-  --bc-button-icon-bg: var(--color-ink, #0e0e0c);
+  --bc-button-border: var(--color-on-accent, #0e0e0c);
+  --bc-button-icon-bg: var(--color-on-accent, #0e0e0c);
   --bc-button-icon-color: #ffffff;
 }
 
-.bc-button--danger:hover:not(.bc-button--disabled):not(.bc-button--loading) {
-  background-color: var(--color-ink, #0e0e0c);
+.bc-button--danger:hover:not(.bc-button--unavailable) {
   color: #ffffff;
+  background-color: var(--color-on-accent, #0e0e0c);
 }
 
-.bc-button--danger:hover:not(.bc-button--disabled):not(.bc-button--loading)
-  .bc-button__icon {
+.bc-button--danger:hover:not(.bc-button--unavailable) .bc-button__icon {
+  color: #ffffff;
   background-color: var(--color-danger, #e5483f);
-  color: #ffffff;
 }
 
-/* Small */
+/* =========================================================
+   SMALL
+   ========================================================= */
 
 .bc-button--small {
   height: 44px;
@@ -356,6 +396,10 @@ const handleClick = (event) => {
   gap: 10px;
 
   font-size: 0.8125rem;
+}
+
+.bc-button--small.bc-button--without-arrow {
+  padding-right: 20px;
 }
 
 .bc-button--small .bc-button__icon {
@@ -369,7 +413,9 @@ const handleClick = (event) => {
   height: 15px;
 }
 
-/* Large */
+/* =========================================================
+   LARGE
+   ========================================================= */
 
 .bc-button--large {
   height: 64px;
@@ -377,6 +423,10 @@ const handleClick = (event) => {
   gap: 18px;
 
   font-size: 1rem;
+}
+
+.bc-button--large.bc-button--without-arrow {
+  padding-right: 32px;
 }
 
 .bc-button--large .bc-button__icon {
@@ -390,24 +440,41 @@ const handleClick = (event) => {
   height: 20px;
 }
 
-/* Full width */
+/* =========================================================
+   FULL WIDTH
+   ========================================================= */
 
 .bc-button--block {
   width: 100%;
 }
 
 .bc-button--block .bc-button__label {
-  flex: 1;
+  flex: 1 1 auto;
+  text-align: left;
+}
+
+.bc-button--block .bc-button__icon {
+  margin-left: auto;
+}
+
+.bc-button--block.bc-button--without-arrow .bc-button__label {
   text-align: center;
 }
 
-/* Disabled and loading */
+/* =========================================================
+   DISABLED AND LOADING
+   ========================================================= */
+
+.bc-button--disabled,
+.bc-button--loading,
+.bc-button:disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
 
 .bc-button--disabled,
 .bc-button:disabled {
-  opacity: 0.45;
   cursor: not-allowed;
-  pointer-events: none;
 }
 
 .bc-button--loading {
@@ -431,7 +498,9 @@ const handleClick = (event) => {
   }
 }
 
-/* Responsive */
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
 
 @media (max-width: 575.98px) {
   .bc-button {
@@ -440,6 +509,10 @@ const handleClick = (event) => {
     gap: 10px;
 
     font-size: 0.875rem;
+  }
+
+  .bc-button--without-arrow {
+    padding-right: 20px;
   }
 
   .bc-button__icon {
@@ -455,8 +528,13 @@ const handleClick = (event) => {
 
   .bc-button--small {
     height: 42px;
-    padding-left: 17px;
+    padding: 0 6px 0 17px;
+
     font-size: 0.8rem;
+  }
+
+  .bc-button--small.bc-button--without-arrow {
+    padding-right: 17px;
   }
 
   .bc-button--small .bc-button__icon {
@@ -467,8 +545,13 @@ const handleClick = (event) => {
 
   .bc-button--large {
     height: 56px;
-    padding-left: 24px;
+    padding: 0 9px 0 24px;
+
     font-size: 0.9375rem;
+  }
+
+  .bc-button--large.bc-button--without-arrow {
+    padding-right: 24px;
   }
 
   .bc-button--large .bc-button__icon {

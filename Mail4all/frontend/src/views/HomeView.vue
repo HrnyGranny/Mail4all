@@ -30,6 +30,14 @@ const toggleSidebar = () => {
   sidebarExpanded.value = !sidebarExpanded.value
 }
 
+const handleSectionChange = (view) => {
+  if (!Object.prototype.hasOwnProperty.call(sectionViews, view)) {
+    return
+  }
+
+  selectedSection.value = view
+}
+
 const handleResize = () => {
   const mobile = window.innerWidth < MOBILE_BREAKPOINT
   const changedToMobile = !isMobile.value && mobile
@@ -61,7 +69,7 @@ onBeforeUnmount(() => {
       :is-expanded="sidebarExpanded"
       :selected-view="selectedSection"
       @toggle-sidebar="toggleSidebar"
-      @select-view="selectedSection = $event"
+      @select-view="handleSectionChange"
     />
 
     <Transition name="overlay">
@@ -87,7 +95,16 @@ onBeforeUnmount(() => {
 
       <main class="content-wrapper container-fluid">
         <div class="content-area">
-          <component :is="currentView" />
+          <Transition
+            name="section"
+            mode="out-in"
+          >
+            <component
+              :is="currentView"
+              :key="selectedSection"
+              @select-view="handleSectionChange"
+            />
+          </Transition>
         </div>
       </main>
 
@@ -164,6 +181,10 @@ onBeforeUnmount(() => {
   overflow: hidden;
 }
 
+/* =========================================================
+   SIDEBAR OVERLAY
+   ========================================================= */
+
 .sidebar-overlay {
   position: fixed;
   inset: 0;
@@ -182,6 +203,31 @@ onBeforeUnmount(() => {
 .overlay-leave-to {
   opacity: 0;
 }
+
+/* =========================================================
+   SECTION TRANSITION
+   ========================================================= */
+
+.section-enter-active,
+.section-leave-active {
+  transition:
+    opacity var(--transition-normal),
+    transform var(--transition-normal);
+}
+
+.section-enter-from {
+  opacity: 0;
+  transform: translateY(10px) scale(0.995);
+}
+
+.section-leave-to {
+  opacity: 0;
+  transform: translateY(-6px) scale(0.995);
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
 
 @media (max-width: 767.98px) {
   .main-content,
@@ -216,4 +262,3 @@ onBeforeUnmount(() => {
   }
 }
 </style>
-``

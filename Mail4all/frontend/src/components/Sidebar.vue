@@ -240,7 +240,7 @@ const handleDonate = () => {
 
           <div class="bc-sidebar__support-heading">
             <span class="bc-sidebar__support-label">
-              Support us
+              Support me
             </span>
 
             <strong class="bc-sidebar__support-title">
@@ -250,7 +250,7 @@ const handleDonate = () => {
         </div>
 
         <p class="bc-sidebar__support-description">
-          Help us maintain and improve the project.
+          Help me maintain and improve the project.
         </p>
 
         <button
@@ -638,9 +638,8 @@ const handleDonate = () => {
 }
 
 .bc-sidebar__support:hover {
-  transform: translateY(-2px);
-
-  box-shadow: 0 10px 20px -16px rgba(var(--color-ink-rgb), 0.45);
+transform: translateY(-2px);
+box-shadow: 4px 4px 0 var(--color-ink);
 }
 
 .bc-sidebar__support::after {

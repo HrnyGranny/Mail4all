@@ -1,13 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 
-defineProps({
-  title: {
-    type: String,
-    default: 'Dashboard',
-  },
-})
-
 const emit = defineEmits(['toggle-sidebar', 'theme-change'])
 
 const isDarkTheme = ref(false)
@@ -21,19 +14,15 @@ const applyTheme = () => {
   emit('theme-change', theme)
 }
 
-const toggleTheme = () => {
-  isDarkTheme.value = !isDarkTheme.value
+const handleThemeChange = (event) => {
+  isDarkTheme.value = event.target.checked
   applyTheme()
 }
 
 const initializeTheme = () => {
   const savedTheme = localStorage.getItem('mailtester-theme')
 
-  if (savedTheme === 'dark' || savedTheme === 'light') {
-    isDarkTheme.value = savedTheme === 'dark'
-  } else {
-    isDarkTheme.value = false
-  }
+  isDarkTheme.value = savedTheme === 'dark'
 
   applyTheme()
 }
@@ -47,10 +36,9 @@ onMounted(() => {
   <header class="bc-navbar">
     <div class="container-fluid h-100 px-3 px-md-4">
       <div class="bc-navbar__inner">
-        <!-- Sidebar toggle -->
         <button
           type="button"
-          class="bc-navbar__icon-button bc-navbar__sidebar-toggle me-3"
+          class="bc-navbar__icon-button"
           aria-label="Open or close sidebar"
           @click="emit('toggle-sidebar')"
         >
@@ -62,9 +50,7 @@ onMounted(() => {
           </span>
         </button>
 
-        <!-- Right actions -->
         <div class="bc-navbar__actions">
-          <!-- Theme switch -->
           <label
             class="bc-switch"
             title="Change color theme"
@@ -74,7 +60,7 @@ onMounted(() => {
               type="checkbox"
               :checked="isDarkTheme"
               aria-label="Enable dark theme"
-              @change="toggleTheme"
+              @change="handleThemeChange"
             />
 
             <span
@@ -97,7 +83,6 @@ onMounted(() => {
             </span>
           </label>
 
-          <!-- Notifications -->
           <div class="dropdown">
             <button
               type="button"
@@ -264,7 +249,7 @@ onMounted(() => {
   border: var(--border-width) solid var(--color-ink);
   border-radius: var(--radius-lg);
 
-  box-shadow: var(--shadow-xs);
+  box-shadow: var(--shadow-sm);
 
   transition:
     color var(--transition-normal),
@@ -280,23 +265,20 @@ onMounted(() => {
 
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .bc-navbar__actions {
   min-width: 0;
-  margin-left: auto;
 
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-/* =========================================================
-   ICON BUTTONS
-   ========================================================= */
+/* Icon buttons */
 
-.bc-navbar__icon-button,
-.bc-navbar__external-icon {
+.bc-navbar__icon-button {
   --bc-accent-ink: #0e0e0c;
   --bc-accent-chartreuse: #d8ff3d;
   --bc-accent-tangerine: #ff5a1f;
@@ -312,17 +294,11 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
 
-  /*
-   * Fixed accent colors.
-   * They do not depend on the active theme.
-   */
   color: var(--bc-accent-ink);
   background-color: var(--bc-accent-chartreuse);
 
   border: var(--border-width) solid var(--bc-accent-ink);
   border-radius: 50%;
-
-  text-decoration: none;
 
   appearance: none;
   cursor: pointer;
@@ -334,8 +310,7 @@ onMounted(() => {
     box-shadow var(--transition-fast);
 }
 
-.bc-navbar__icon-button:hover,
-.bc-navbar__external-icon:hover {
+.bc-navbar__icon-button:hover {
   color: var(--bc-accent-chartreuse);
   background-color: var(--bc-accent-ink);
 
@@ -344,117 +319,19 @@ onMounted(() => {
   box-shadow: 3px 3px 0 var(--bc-accent-tangerine);
 }
 
-.bc-navbar__icon-button:active,
-.bc-navbar__external-icon:active {
+.bc-navbar__icon-button:active {
   transform: translateY(0);
   box-shadow: none;
 }
 
-.bc-navbar__icon-button .material-symbols-rounded,
-.bc-navbar__external-icon .material-symbols-rounded {
+.bc-navbar__icon-button .material-symbols-rounded {
   width: 22px;
   height: 22px;
 
   font-size: 22px;
 }
 
-/* =========================================================
-   EXTERNAL SERVICE BUTTON
-   ========================================================= */
-
-.bc-navbar__external-wrapper {
-  flex: 0 0 auto;
-}
-
-.bc-navbar__external-wrapper :deep(.bc-button) {
-  /*
-   * These variables use fixed colors instead of theme tokens.
-   * Therefore the button never changes in dark mode.
-   */
-  --bc-button-bg: #d8ff3d;
-  --bc-button-color: #0e0e0c;
-  --bc-button-icon-bg: #0e0e0c;
-  --bc-button-icon-color: #d8ff3d;
-
-  width: auto;
-  max-width: 190px;
-
-  color: #0e0e0c;
-  background-color: #d8ff3d;
-
-  border-color: #0e0e0c;
-}
-
-.bc-navbar__external-wrapper :deep(.bc-button__label) {
-  max-width: 120px;
-}
-
-.bc-navbar__external-wrapper :deep(.bc-button__icon) {
-  color: #d8ff3d;
-  background-color: #0e0e0c;
-}
-
-/* Fixed hover colors */
-
-.bc-navbar__external-wrapper
-  :deep(.bc-button:hover:not(.bc-button--disabled):not(.bc-button--loading)) {
-  color: #d8ff3d;
-  background-color: #0e0e0c;
-  border-color: #0e0e0c;
-}
-
-.bc-navbar__external-wrapper
-  :deep(.bc-button:hover:not(.bc-button--disabled):not(.bc-button--loading) .bc-button__icon) {
-  color: #0e0e0c;
-  background-color: #d8ff3d;
-}
-
-/* =========================================================
-   PAGE TITLE
-   ========================================================= */
-
-.bc-navbar__title-group {
-  min-width: 0;
-
-  display: flex;
-  flex-direction: column;
-}
-
-.bc-navbar__eyebrow,
-.bc-dropdown__eyebrow {
-  font-family: var(--font-mono);
-  text-transform: uppercase;
-  letter-spacing: 0.11em;
-}
-
-.bc-navbar__eyebrow {
-  color: var(--color-graphite);
-
-  font-size: 0.53rem;
-  font-weight: 600;
-  line-height: 1.2;
-}
-
-.bc-navbar__title {
-  max-width: 260px;
-  margin: 0;
-
-  color: var(--color-ink);
-
-  font-family: var(--font-body);
-  font-size: 1.1rem;
-  font-weight: 800;
-  line-height: 1.15;
-  letter-spacing: -0.04em;
-
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* =========================================================
-   THEME SWITCH
-   ========================================================= */
+/* Theme switch */
 
 .bc-switch {
   position: relative;
@@ -514,6 +391,7 @@ onMounted(() => {
   color: var(--color-ink);
 
   font-size: 16px;
+
   font-variation-settings:
     "FILL" 0,
     "wght" 500,
@@ -556,6 +434,7 @@ onMounted(() => {
 
 .bc-switch__input:checked + .bc-switch__track .bc-switch__thumb {
   left: 37px;
+
   background-color: #f2eee5;
 }
 
@@ -578,9 +457,7 @@ onMounted(() => {
   outline-offset: 3px;
 }
 
-/* =========================================================
-   NOTIFICATION BADGE
-   ========================================================= */
+/* Notification badge */
 
 .bc-navbar__badge {
   position: absolute;
@@ -607,9 +484,7 @@ onMounted(() => {
   line-height: 1;
 }
 
-/* =========================================================
-   DROPDOWN
-   ========================================================= */
+/* Notification dropdown */
 
 .bc-dropdown {
   margin-top: 12px !important;
@@ -646,20 +521,23 @@ onMounted(() => {
   flex-direction: column;
 }
 
+.bc-dropdown__eyebrow {
+  color: var(--color-graphite);
+
+  font-family: var(--font-mono);
+  font-size: 0.52rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
 .bc-dropdown__title {
   color: var(--color-ink);
 
   font-size: 0.9rem;
   line-height: 1.3;
   letter-spacing: -0.02em;
-}
-
-.bc-dropdown__eyebrow {
-  color: var(--color-graphite);
-
-  font-size: 0.52rem;
-  font-weight: 600;
-  line-height: 1.3;
 }
 
 .bc-dropdown__counter {
@@ -688,9 +566,7 @@ onMounted(() => {
   flex-direction: column;
 }
 
-/* =========================================================
-   NOTIFICATIONS
-   ========================================================= */
+/* Notification items */
 
 .bc-notification {
   width: 100%;
@@ -733,13 +609,13 @@ onMounted(() => {
 }
 
 .bc-notification__icon--orange {
-  color: #0e0e0c;
   background-color: #ff5a1f;
 }
 
 .bc-notification__icon--paper {
   color: var(--color-ink);
   background-color: var(--color-paper);
+
   border-color: var(--color-ink);
 }
 
@@ -805,9 +681,7 @@ onMounted(() => {
   transform: translateX(0);
 }
 
-/* =========================================================
-   DROPDOWN ACTION
-   ========================================================= */
+/* Dropdown action */
 
 .bc-dropdown__action {
   width: 100%;
@@ -850,22 +724,14 @@ onMounted(() => {
   transform: translateX(4px);
 }
 
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
-
-@media (max-width: 991.98px) {
-  .bc-navbar__actions {
-    gap: 8px;
-  }
-}
+/* Responsive */
 
 @media (max-width: 767.98px) {
   .bc-navbar {
     position: fixed;
     top: 0;
-    left: 0;
     right: 0;
+    left: 0;
     z-index: 1020;
 
     width: 100%;
@@ -877,10 +743,6 @@ onMounted(() => {
     border-radius: 0;
 
     box-shadow: none;
-  }
-
-  .bc-navbar__title {
-    max-width: 140px;
   }
 
   .bc-dropdown {
@@ -907,15 +769,6 @@ onMounted(() => {
     flex-basis: 38px;
   }
 
-  .bc-navbar__title {
-    max-width: 125px;
-    font-size: 1rem;
-  }
-
-  .bc-navbar__eyebrow {
-    font-size: 0.48rem;
-  }
-
   .bc-switch__track {
     width: 60px;
     height: 34px;
@@ -929,26 +782,6 @@ onMounted(() => {
 
   .bc-switch__input:checked + .bc-switch__track .bc-switch__thumb {
     left: 29px;
-  }
-}
-
-@media (max-width: 420px) {
-  .bc-navbar__eyebrow {
-    display: none;
-  }
-
-  .bc-navbar__title {
-    max-width: 100px;
-  }
-
-  .bc-navbar__sidebar-toggle {
-    margin-right: 8px !important;
-  }
-}
-
-@media (max-width: 360px) {
-  .bc-navbar__title-group {
-    display: none;
   }
 }
 </style>

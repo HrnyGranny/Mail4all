@@ -4,7 +4,7 @@ import brandLogo from '@/assets/img/MailTester_Logo.png'
 const currentYear = new Date().getFullYear()
 
 // Leemos la variable global inyectada por Vite con un fallback por seguridad
-const appVersion = typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : '0.0.1'
+const appVersion = typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : '0.0.5'
 </script>
 
 <template>
