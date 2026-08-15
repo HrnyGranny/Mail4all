@@ -274,12 +274,19 @@ const appVersion = typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : '0
    ========================================================= */
 @media (max-width: 575.98px) {
   .bc-footer {
-    padding: 12px 16px 20px; /* Ligeramente menos padding inferior para compensar */
+    padding: 16px 16px 24px; 
   }
 
   .bc-footer__content {
     grid-template-columns: 1fr;
-    row-gap: 12px; /* Distancia menor e idéntica entre los 3 bloques */
+    row-gap: 14px; /* Distancia matemática idéntica */
+  }
+
+  .bc-footer__identity {
+    /* COMPENSACIÓN ÓPTICA: 
+       Resta los ~8px de altura sobrante del logo respecto al texto
+       para que la siguiente fila encaje perfecta visualmente. */
+    margin-bottom: -8px; 
   }
 
   .bc-footer__copyright {
