@@ -1,24 +1,24 @@
 <template>
-  <section class="send-mode">
-    <div class="send-mode__content">
-      <span class="send-mode__eyebrow">
+  <section class="dropmail-mode">
+    <div class="dropmail-mode__content">
+      <span class="dropmail-mode__eyebrow">
         Mode · 01
       </span>
 
-      <div class="send-mode__title-row">
+      <div class="dropmail-mode__title-row">
         <span
-          class="send-mode__icon material-symbols-rounded"
+          class="dropmail-mode__icon material-symbols-rounded"
           aria-hidden="true"
         >
           send
         </span>
 
-        <h2 class="send-mode__title">
-          Send mails
+        <h2 class="dropmail-mode__title">
+          Dropmail
         </h2>
       </div>
 
-      <p class="send-mode__description">
+      <p class="dropmail-mode__description">
         The mail composition workspace will be displayed here.
       </p>
     </div>
@@ -26,7 +26,7 @@
 </template>
 
 <style scoped>
-.send-mode {
+.dropmail-mode {
   flex: 1 1 auto;
 
   width: 100%;
@@ -47,7 +47,7 @@
   overflow: hidden;
 }
 
-.send-mode__content {
+.dropmail-mode__content {
   max-width: 520px;
   padding: 24px;
 
@@ -59,7 +59,7 @@
   text-align: center;
 }
 
-.send-mode__eyebrow {
+.dropmail-mode__eyebrow {
   color: var(--color-graphite);
 
   font-family: var(--font-mono);
@@ -70,14 +70,14 @@
   text-transform: uppercase;
 }
 
-.send-mode__title-row {
+.dropmail-mode__title-row {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 12px;
 }
 
-.send-mode__icon {
+.dropmail-mode__icon {
   width: 44px;
   height: 44px;
   flex: 0 0 44px;
@@ -95,7 +95,7 @@
   font-size: 24px;
 }
 
-.send-mode__title {
+.dropmail-mode__title {
   margin: 0;
 
   color: var(--color-ink);
@@ -106,7 +106,7 @@
   letter-spacing: -0.05em;
 }
 
-.send-mode__description {
+.dropmail-mode__description {
   max-width: 42ch;
   margin: 0;
 
@@ -117,15 +117,15 @@
 }
 
 @media (max-width: 575.98px) {
-  .send-mode__content {
+  .dropmail-mode__content {
     padding: 18px;
   }
 
-  .send-mode__title-row {
+  .dropmail-mode__title-row {
     flex-direction: column;
   }
 
-  .send-mode__title {
+  .dropmail-mode__title {
     font-size: 2rem;
   }
 }

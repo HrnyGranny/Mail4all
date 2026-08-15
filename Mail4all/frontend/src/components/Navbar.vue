@@ -1,17 +1,10 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 
-import BaseButton from '@/components/ui/BaseButton.vue'
-
 defineProps({
   title: {
     type: String,
     default: 'Dashboard',
-  },
-
-  temporaryMailUrl: {
-    type: String,
-    default: 'https://temp-mail.org/',
   },
 })
 
@@ -71,35 +64,6 @@ onMounted(() => {
 
         <!-- Right actions -->
         <div class="bc-navbar__actions">
-          <!-- External temporary inbox service -->
-          <div class="bc-navbar__external-wrapper d-none d-lg-block">
-            <BaseButton
-              :href="temporaryMailUrl"
-              target="_blank"
-              aria-label="Open temporary inbox service"
-              variant="primary"
-              size="small"
-            >
-              <span>Open Temp Inbox</span>
-            </BaseButton>
-          </div>
-
-          <!-- Compact external link -->
-          <a
-            :href="temporaryMailUrl"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="bc-navbar__external-icon d-none d-sm-inline-flex d-lg-none"
-            aria-label="Open temporary inbox service"
-          >
-            <span
-              class="material-symbols-rounded"
-              aria-hidden="true"
-            >
-              alternate_email
-            </span>
-          </a>
-
           <!-- Theme switch -->
           <label
             class="bc-switch"
@@ -134,7 +98,7 @@ onMounted(() => {
           </label>
 
           <!-- Notifications -->
-          <div class="dropdown d-none d-sm-block">
+          <div class="dropdown">
             <button
               type="button"
               class="bc-navbar__icon-button position-relative"

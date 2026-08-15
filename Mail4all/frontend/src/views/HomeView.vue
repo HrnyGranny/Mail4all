@@ -5,6 +5,8 @@ import Navbar from '@/components/Navbar.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import AppFooter from '@/components/Footer.vue'
 import Home from '@/components/sections/Home.vue'
+import Send from '@/components/sections/send/Send.vue'
+import Receive from '@/components/sections/receive/Receive.vue'
 import AboutUs from '@/components/sections/AboutUs.vue'
 
 const MOBILE_BREAKPOINT = 768
@@ -13,8 +15,15 @@ const isMobile = ref(window.innerWidth < MOBILE_BREAKPOINT)
 const sidebarExpanded = ref(!isMobile.value)
 const selectedSection = ref('home')
 
+const sectionViews = {
+  home: Home,
+  send: Send,
+  receive: Receive,
+  about: AboutUs,
+}
+
 const currentView = computed(() => {
-  return selectedSection.value === 'about' ? AboutUs : Home
+  return sectionViews[selectedSection.value] || Home
 })
 
 const toggleSidebar = () => {

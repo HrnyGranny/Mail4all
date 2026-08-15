@@ -1,4 +1,8 @@
 <script setup>
+import brandLogo from '@/assets/img/MailTester_Logo.png'
+
+const brandLogoSrc = brandLogo
+
 defineProps({
   isExpanded: {
     type: Boolean,
@@ -47,7 +51,11 @@ const handleDonate = () => {
         class="bc-sidebar__logo"
         aria-hidden="true"
       >
-        M
+        <img
+          :src="brandLogoSrc"
+          alt="Mail4all logo"
+          class="bc-sidebar__logo-image"
+        >
       </span>
 
       <div
@@ -55,11 +63,12 @@ const handleDonate = () => {
         class="bc-sidebar__brand-text"
       >
         <span class="bc-sidebar__eyebrow">
-          The easy way to test your emails.
+          One monthly send.<br>
+          Unlimited 7-day inboxes.
         </span>
 
         <span class="bc-sidebar__name">
-          MailTester
+          Mail4all
         </span>
       </div>
     </button>
@@ -111,6 +120,74 @@ const handleDonate = () => {
           </button>
         </li>
 
+        <!-- Send -->
+        <li class="bc-sidebar__item">
+          <button
+            type="button"
+            class="bc-sidebar__link"
+            :class="{ 'bc-sidebar__link--active': selectedView === 'send' }"
+            title="Send"
+            aria-pressed="selectedView === 'send'"
+            @click="handleSectionChange('send')"
+          >
+            <span
+              class="bc-sidebar__icon material-symbols-rounded"
+              aria-hidden="true"
+            >
+              send
+            </span>
+
+            <span
+              v-if="isExpanded"
+              class="bc-sidebar__link-text"
+            >
+              Send
+            </span>
+
+            <span
+              v-if="isExpanded"
+              class="bc-sidebar__link-index"
+              aria-hidden="true"
+            >
+              02
+            </span>
+          </button>
+        </li>
+
+        <!-- Receive -->
+        <li class="bc-sidebar__item">
+          <button
+            type="button"
+            class="bc-sidebar__link"
+            :class="{ 'bc-sidebar__link--active': selectedView === 'receive' }"
+            title="Receive"
+            aria-pressed="selectedView === 'receive'"
+            @click="handleSectionChange('receive')"
+          >
+            <span
+              class="bc-sidebar__icon material-symbols-rounded"
+              aria-hidden="true"
+            >
+              inbox
+            </span>
+
+            <span
+              v-if="isExpanded"
+              class="bc-sidebar__link-text"
+            >
+              Receive
+            </span>
+
+            <span
+              v-if="isExpanded"
+              class="bc-sidebar__link-index"
+              aria-hidden="true"
+            >
+              03
+            </span>
+          </button>
+        </li>
+
         <!-- About us -->
         <li class="bc-sidebar__item">
           <button
@@ -140,7 +217,7 @@ const handleDonate = () => {
               class="bc-sidebar__link-index"
               aria-hidden="true"
             >
-              02
+              04
             </span>
           </button>
         </li>
@@ -167,7 +244,7 @@ const handleDonate = () => {
             </span>
 
             <strong class="bc-sidebar__support-title">
-              Keep MailTester alive
+              Keep Mail4all alive
             </strong>
           </div>
         </div>
@@ -314,24 +391,24 @@ const handleDonate = () => {
   position: relative;
   z-index: 1;
 
-  width: 38px;
-  height: 38px;
-  flex: 0 0 38px;
+  width: 54px;
+  height: 54px;
+  flex: 0 0 54px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  color: #d8ff3d;
-  background-color: #0e0e0c;
+  overflow: hidden;
+}
 
-  border: var(--border-width) solid #0e0e0c;
-  border-radius: 12px;
+.bc-sidebar__logo-image {
+  width: 100%;
+  height: 100%;
 
-  font-family: var(--font-body);
-  font-size: 1.15rem;
-  font-weight: 800;
-  letter-spacing: -0.06em;
+  display: block;
+
+  object-fit: contain;
 }
 
 .bc-sidebar__brand-text {

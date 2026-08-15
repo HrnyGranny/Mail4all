@@ -1,18 +1,18 @@
 <script setup>
 import { computed, ref } from 'vue'
 
-import Send from '@/components/sections/send/Send.vue'
-import Subscribe from '@/components/sections/subscribe/Subscribe.vue'
+import Dropmail from '@/components/sections/send/dropmail/Dropmail.vue'
+import Subscribe from '@/components/sections/send/subscribe/Subscribe.vue'
 
 const MODES = {
-  SEND: 'send',
+  DROPMAIL: 'dropmail',
   SUBSCRIBE: 'subscribe',
 }
 
-const activeMode = ref(MODES.SEND)
+const activeMode = ref(MODES.DROPMAIL)
 
 const activeComponent = computed(() => {
-  return activeMode.value === MODES.SEND ? Send : Subscribe
+  return activeMode.value === MODES.DROPMAIL ? Dropmail : Subscribe
 })
 
 const selectMode = (mode) => {
@@ -21,29 +21,28 @@ const selectMode = (mode) => {
 </script>
 
 <template>
-  <section class="home-section">
-    <article class="home-card">
-      <!-- Mode selector -->
-      <header class="home-card__header">
-        <div class="home-card__heading">
-          <span class="home-card__eyebrow">
+  <section class="send-section">
+    <article class="send-card">
+      <header class="send-card__header">
+        <div class="send-card__heading">
+          <span class="send-card__eyebrow">
             Mail workspace
           </span>
 
-          <h2 class="home-card__title">
-            Choose your mode
+          <h2 class="send-card__title">
+            Send workspace
           </h2>
         </div>
 
         <div
-          class="home-toggle"
+          class="send-toggle"
           role="tablist"
-          aria-label="Mail workspace mode"
+          aria-label="Send workspace mode"
         >
           <span
-            class="home-toggle__slider"
+            class="send-toggle__slider"
             :class="{
-              'home-toggle__slider--subscribe':
+              'send-toggle__slider--subscribe':
                 activeMode === MODES.SUBSCRIBE,
             }"
             aria-hidden="true"
@@ -51,58 +50,57 @@ const selectMode = (mode) => {
 
           <button
             type="button"
-            class="home-toggle__option"
+            class="send-toggle__option"
             :class="{
-              'home-toggle__option--active':
-                activeMode === MODES.SEND,
+              'send-toggle__option--active':
+                activeMode === MODES.DROPMAIL,
             }"
             role="tab"
-            :aria-selected="activeMode === MODES.SEND"
-            aria-controls="home-mode-panel"
-            @click="selectMode(MODES.SEND)"
+            :aria-selected="activeMode === MODES.DROPMAIL"
+            aria-controls="send-mode-panel"
+            @click="selectMode(MODES.DROPMAIL)"
           >
             <span
-              class="home-toggle__icon material-symbols-rounded"
+              class="send-toggle__icon material-symbols-rounded"
               aria-hidden="true"
             >
               send
             </span>
 
-            <span class="home-toggle__label">
-              Send mails
+            <span class="send-toggle__label">
+              Dropmail
             </span>
           </button>
 
           <button
             type="button"
-            class="home-toggle__option"
+            class="send-toggle__option"
             :class="{
-              'home-toggle__option--active':
+              'send-toggle__option--active':
                 activeMode === MODES.SUBSCRIBE,
             }"
             role="tab"
             :aria-selected="activeMode === MODES.SUBSCRIBE"
-            aria-controls="home-mode-panel"
+            aria-controls="send-mode-panel"
             @click="selectMode(MODES.SUBSCRIBE)"
           >
             <span
-              class="home-toggle__icon material-symbols-rounded"
+              class="send-toggle__icon material-symbols-rounded"
               aria-hidden="true"
             >
               mark_email_unread
             </span>
 
-            <span class="home-toggle__label">
+            <span class="send-toggle__label">
               Subscribe
             </span>
           </button>
         </div>
       </header>
 
-      <!-- Active mode -->
       <div
-        id="home-mode-panel"
-        class="home-card__body"
+        id="send-mode-panel"
+        class="send-card__body"
         role="tabpanel"
         tabindex="0"
       >
@@ -123,7 +121,7 @@ const selectMode = (mode) => {
 </template>
 
 <style scoped>
-.home-section {
+.send-section {
   flex: 1 1 auto;
 
   width: 100%;
@@ -132,11 +130,12 @@ const selectMode = (mode) => {
   min-height: 0;
 
   display: flex;
+  display: flex;
 
   overflow: hidden;
 }
 
-.home-card {
+.send-card {
   flex: 1 1 auto;
 
   width: 100%;
@@ -162,15 +161,11 @@ const selectMode = (mode) => {
     box-shadow var(--transition-normal);
 }
 
-.home-card:hover {
+.send-card:hover {
   box-shadow: var(--shadow-lg);
 }
 
-/* =========================================================
-   HEADER
-   ========================================================= */
-
-.home-card__header {
+.send-card__header {
   position: relative;
 
   min-width: 0;
@@ -189,7 +184,7 @@ const selectMode = (mode) => {
   overflow: hidden;
 }
 
-.home-card__header::after {
+.send-card__header::after {
   content: "";
 
   position: absolute;
@@ -207,7 +202,7 @@ const selectMode = (mode) => {
   pointer-events: none;
 }
 
-.home-card__heading {
+.send-card__heading {
   position: relative;
   z-index: 1;
 
@@ -218,18 +213,18 @@ const selectMode = (mode) => {
   gap: 4px;
 }
 
-.home-card__eyebrow {
+.send-card__eyebrow {
   color: var(--color-graphite);
 
   font-family: var(--font-mono);
-  font-size: 0.6rem;
+  font-size: 0.62rem;
   font-weight: 600;
   line-height: 1.2;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
-.home-card__title {
+.send-card__title {
   margin: 0;
 
   color: var(--color-ink);
@@ -240,11 +235,7 @@ const selectMode = (mode) => {
   letter-spacing: -0.045em;
 }
 
-/* =========================================================
-   MODE TOGGLE
-   ========================================================= */
-
-.home-toggle {
+.send-toggle {
   position: relative;
   z-index: 1;
 
@@ -263,7 +254,7 @@ const selectMode = (mode) => {
   overflow: hidden;
 }
 
-.home-toggle__slider {
+.send-toggle__slider {
   position: absolute;
   top: 4px;
   bottom: 4px;
@@ -282,11 +273,11 @@ const selectMode = (mode) => {
   transition: transform 260ms var(--ease-boldcase);
 }
 
-.home-toggle__slider--subscribe {
+.send-toggle__slider--subscribe {
   transform: translateX(100%);
 }
 
-.home-toggle__option {
+.send-toggle__option {
   position: relative;
   z-index: 1;
 
@@ -319,15 +310,15 @@ const selectMode = (mode) => {
     transform var(--transition-fast);
 }
 
-.home-toggle__option:hover {
+.send-toggle__option:hover {
   transform: translateY(-1px);
 }
 
-.home-toggle__option--active {
+.send-toggle__option--active {
   color: #0e0e0c;
 }
 
-.home-toggle__icon {
+.send-toggle__icon {
   width: 19px;
   height: 19px;
   flex: 0 0 19px;
@@ -342,7 +333,7 @@ const selectMode = (mode) => {
     "opsz" 20;
 }
 
-.home-toggle__label {
+.send-toggle__label {
   min-width: 0;
 
   overflow: hidden;
@@ -350,11 +341,7 @@ const selectMode = (mode) => {
   white-space: nowrap;
 }
 
-/* =========================================================
-   ACTIVE MODE CONTENT
-   ========================================================= */
-
-.home-card__body {
+.send-card__body {
   position: relative;
 
   min-width: 0;
@@ -385,44 +372,36 @@ const selectMode = (mode) => {
   transform: translateY(-8px);
 }
 
-/* =========================================================
-   LOW HEIGHT
-   ========================================================= */
-
 @media (max-height: 650px) and (min-width: 768px) {
-  .home-card {
+  .send-card {
     grid-template-rows: 96px minmax(0, 1fr);
   }
 
-  .home-card__header {
+  .send-card__header {
     padding: 14px 22px;
   }
 
-  .home-card__title {
+  .send-card__title {
     font-size: 1.4rem;
   }
 
-  .home-toggle {
+  .send-toggle {
     height: 46px;
   }
 
-  .home-card__body {
+  .send-card__body {
     padding: 18px;
   }
 }
 
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
-
 @media (max-width: 767.98px) {
-  .home-card {
+  .send-card {
     grid-template-rows: auto minmax(0, 1fr);
 
     border-radius: var(--radius-lg);
   }
 
-  .home-card__header {
+  .send-card__header {
     min-height: 136px;
     padding: 18px;
 
@@ -432,50 +411,50 @@ const selectMode = (mode) => {
     gap: 14px;
   }
 
-  .home-card__header::after {
+  .send-card__header::after {
     top: -115px;
     right: -70px;
   }
 
-  .home-card__heading {
+  .send-card__heading {
     padding-right: 65px;
   }
 
-  .home-card__title {
+  .send-card__title {
     font-size: 1.45rem;
   }
 
-  .home-toggle {
+  .send-toggle {
     width: 100%;
     max-width: none;
   }
 
-  .home-card__body {
+  .send-card__body {
     padding: 16px;
   }
 }
 
 @media (max-width: 420px) {
-  .home-card__header {
+  .send-card__header {
     padding: 15px;
   }
 
-  .home-card__body {
+  .send-card__body {
     padding: 12px;
   }
 
-  .home-toggle {
+  .send-toggle {
     height: 48px;
   }
 
-  .home-toggle__option {
+  .send-toggle__option {
     padding: 0 10px;
     gap: 6px;
 
     font-size: 0.7rem;
   }
 
-  .home-toggle__icon {
+  .send-toggle__icon {
     width: 17px;
     height: 17px;
     flex-basis: 17px;

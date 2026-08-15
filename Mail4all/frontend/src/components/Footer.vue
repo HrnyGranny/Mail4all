@@ -1,5 +1,10 @@
 <script setup>
+import brandLogo from '@/assets/img/MailTester_Logo.png'
+
 const currentYear = new Date().getFullYear()
+
+// Leemos la variable global inyectada por Vite con un fallback por seguridad
+const appVersion = typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : '0.0.1'
 </script>
 
 <template>
@@ -10,16 +15,21 @@ const currentYear = new Date().getFullYear()
     ></div>
 
     <div class="bc-footer__content">
+      <!-- 1. Identity -->
       <div class="bc-footer__identity">
         <span
           class="bc-footer__mark"
           aria-hidden="true"
         >
-          MT
+          <img
+            :src="brandLogo"
+            alt="Mail4all logo"
+            class="bc-footer__mark-image"
+          >
         </span>
 
         <p class="bc-footer__copyright">
-          © {{ currentYear }} MailTester · Crafted by
+          © {{ currentYear }} Mail4all · Crafted by
 
           <a
             href="https://github.com/HrnyGranny"
@@ -31,6 +41,7 @@ const currentYear = new Date().getFullYear()
         </p>
       </div>
 
+      <!-- 2. Legal links -->
       <nav
         class="bc-footer__legal"
         aria-label="Legal information"
@@ -57,15 +68,14 @@ const currentYear = new Date().getFullYear()
         </RouterLink>
       </nav>
 
+      <!-- 3. Version metadata -->
       <div class="bc-footer__meta">
-        <span>Build · 001</span>
-
-        <span
-          class="bc-footer__dot"
-          aria-hidden="true"
-        ></span>
-
-        <span>v1.0</span>
+        <div 
+          class="bc-footer__version-badge" 
+          title="Current Version"
+        >
+          <span>v{{ appVersion }}</span>
+        </div>
       </div>
     </div>
   </footer>
@@ -74,77 +84,66 @@ const currentYear = new Date().getFullYear()
 <style scoped>
 .bc-footer {
   flex: 0 0 auto;
-
-  padding: 0 20px 18px;
-
+  padding: 0 20px 24px;
   color: var(--color-ink);
 }
 
 .bc-footer__line {
   width: 100%;
   height: 1px;
-  margin-bottom: 14px;
-
+  margin-bottom: 16px;
   background-color: var(--color-ink);
-
   opacity: 0.35;
 }
 
+/* Base Layout (Desktop) */
 .bc-footer__content {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
-  gap: 18px;
+  gap: 32px;
 }
 
-/* Identity */
-
+/* =========================================================
+   1. IDENTITY (Logo + Copyright)
+   ========================================================= */
 .bc-footer__identity {
   min-width: 0;
-
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
 .bc-footer__mark {
-  width: 29px;
-  height: 29px;
-  flex: 0 0 29px;
-
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+}
 
-  color: #0e0e0c;
-  background-color: #d8ff3d;
-
-  border: 1px solid #0e0e0c;
-  border-radius: 9px;
-
-  font-family: var(--font-mono);
-  font-size: 0.58rem;
-  font-weight: 700;
+.bc-footer__mark-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
 }
 
 .bc-footer__copyright {
   min-width: 0;
   margin: 0;
-
   color: var(--color-graphite);
-
   font-size: 0.72rem;
   line-height: 1.4;
 }
 
 .bc-footer__copyright a {
   color: var(--color-ink);
-
   font-weight: 700;
   text-decoration: none;
-
   border-bottom: 1px solid var(--color-ink);
-
   transition:
     color var(--transition-fast),
     border-color var(--transition-fast);
@@ -155,47 +154,39 @@ const currentYear = new Date().getFullYear()
   border-color: var(--color-tangerine);
 }
 
-/* Legal links */
-
+/* =========================================================
+   2. LEGAL LINKS
+   ========================================================= */
 .bc-footer__legal {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-
   white-space: nowrap;
 }
 
 .bc-footer__legal-link {
   position: relative;
-
   color: var(--color-graphite);
-
   font-family: var(--font-mono);
   font-size: 0.56rem;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-decoration: none;
   text-transform: uppercase;
-
   transition: color var(--transition-fast);
 }
 
 .bc-footer__legal-link::after {
   content: "";
-
   position: absolute;
   right: 0;
   bottom: -3px;
   left: 0;
-
   height: 1px;
-
   background-color: var(--color-tangerine);
-
   transform: scaleX(0);
   transform-origin: right;
-
   transition: transform var(--transition-fast);
 }
 
@@ -214,81 +205,91 @@ const currentYear = new Date().getFullYear()
 
 .bc-footer__separator {
   color: var(--color-graphite);
-
   font-family: var(--font-mono);
   font-size: 0.58rem;
-
   opacity: 0.55;
 }
 
-/* Build metadata */
-
+/* =========================================================
+   3. VERSION METADATA
+   ========================================================= */
 .bc-footer__meta {
   min-width: 0;
-
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 8px;
-
-  color: var(--color-graphite);
-
   font-family: var(--font-mono);
   font-size: 0.56rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-
   white-space: nowrap;
 }
 
-.bc-footer__dot {
-  width: 6px;
-  height: 6px;
+.bc-footer__version-badge {
+  --bc-accent-ink: #0e0e0c;
+  --bc-accent-chartreuse: #d8ff3d;
 
-  background-color: #ff5a1f;
-
-  border: 1px solid #0e0e0c;
-  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  
+  color: var(--bc-accent-ink);
+  background-color: var(--bc-accent-chartreuse);
+  
+  border: var(--border-width, 1px) solid var(--bc-accent-ink);
+  border-radius: 20px;
+  
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  
+  transition: 
+    background-color var(--transition-fast), 
+    color var(--transition-fast);
 }
 
-/* Responsive */
+.bc-footer__version-badge:hover {
+  background-color: var(--bc-accent-ink);
+  color: var(--bc-accent-chartreuse);
+}
 
+/* =========================================================
+   RESPONSIVE (Tablet)
+   ========================================================= */
 @media (max-width: 991.98px) {
   .bc-footer__content {
     grid-template-columns: minmax(0, 1fr) auto;
+    row-gap: 20px;
   }
 
   .bc-footer__legal {
     grid-column: 1 / -1;
     grid-row: 2;
-
     justify-content: flex-start;
-
-    padding-left: 39px;
+    padding-left: 42px;
   }
 }
 
+/* =========================================================
+   RESPONSIVE (Mobile)
+   ========================================================= */
 @media (max-width: 575.98px) {
   .bc-footer {
-    padding: 4px 12px 16px;
+    padding: 12px 16px 20px; /* Ligeramente menos padding inferior para compensar */
   }
 
   .bc-footer__content {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+    grid-template-columns: 1fr;
+    row-gap: 12px; /* Distancia menor e idéntica entre los 3 bloques */
   }
 
   .bc-footer__copyright {
-    font-size: 0.65rem;
+    font-size: 0.68rem;
   }
 
   .bc-footer__legal {
-    padding-left: 39px;
-
-    flex-wrap: wrap;
+    grid-column: 1;
+    grid-row: 2;
+    padding-left: 42px;
     justify-content: flex-start;
   }
 
@@ -297,8 +298,9 @@ const currentYear = new Date().getFullYear()
   }
 
   .bc-footer__meta {
-    padding-left: 39px;
-
+    grid-column: 1;
+    grid-row: 3;
+    padding-left: 42px;
     justify-content: flex-start;
   }
 }

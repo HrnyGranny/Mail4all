@@ -1,1 +1,1 @@
-# MailTester
+# Mail4all

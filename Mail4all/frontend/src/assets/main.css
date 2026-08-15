@@ -113,8 +113,8 @@ html[data-theme="dark"] {
 
   --color-ink-rgb: 247, 243, 233;
 
-  --shadow-xs: 0 3px 0 #f7f3e9;
-  --shadow-sm: 0 6px 0 #f7f3e9;
+  --shadow-xs: 0 3px 0 #0e0e0c;
+  --shadow-sm: 0 6px 0 #0e0e0c;
   --shadow-md: 0 10px 24px -14px rgba(0, 0, 0, 0.8);
   --shadow-lg: 0 18px 40px -24px rgba(0, 0, 0, 0.9);
 
