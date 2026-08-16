@@ -36,6 +36,15 @@ const handleSectionChange = (view) => {
   }
 
   selectedSection.value = view
+
+  if (isMobile.value) {
+    requestAnimationFrame(() => {
+      document.querySelector('.main-content')?.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      })
+    })
+  }
 }
 
 const handleResize = () => {
@@ -239,26 +248,51 @@ onBeforeUnmount(() => {
     margin-left: 0;
     padding-top: var(--navbar-height);
 
-    overflow: hidden;
+    display: block;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    overscroll-behavior-y: contain;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
   }
 
   .content-wrapper {
-    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+    min-height: calc(100dvh - var(--navbar-height));
+    flex: 0 0 auto;
 
-    min-height: 0;
     padding: 12px;
 
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+    overflow: visible;
   }
 
   .content-area {
-    flex: 1 1 auto;
-
     width: 100%;
-    height: 100%;
-    min-height: 0;
+    height: auto;
+    min-width: 0;
+    min-height: calc(100dvh - var(--navbar-height) - 24px);
+    flex: 1 0 auto;
 
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+    overflow: visible;
+  }
+
+  .section-enter-from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+
+  .section-leave-to {
+    opacity: 0;
+    transform: translateX(-6px);
   }
 }
 </style>

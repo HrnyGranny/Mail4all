@@ -1249,18 +1249,21 @@ const handleSectionChange = (view) => {
 
 @media (max-width: 991.98px) {
   .home-section {
+    width: 100%;
+    height: auto;
+    min-height: 100%;
+
     display: block;
 
     padding: 0 0 6px;
 
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: visible;
   }
 
   .home-card {
     width: 100%;
     height: auto;
-    min-height: calc(100% - 6px);
+    min-height: 100%;
 
     display: flex;
     flex-direction: column;
