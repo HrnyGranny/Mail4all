@@ -3,6 +3,44 @@ import BaseButton from '@/components/ui/BaseButton.vue'
 
 const emit = defineEmits(['select-view'])
 
+const sendBenefits = [
+  {
+    icon: 'calendar_month',
+    label: '1 email monthly',
+  },
+  {
+    icon: 'subscriptions',
+    label: 'Subscriptions',
+  },
+  {
+    icon: 'article',
+    label: 'Email templates',
+  },
+  {
+    icon: 'code',
+    label: 'Edit email code',
+  },
+]
+
+const receiveBenefits = [
+  {
+    icon: 'all_inclusive',
+    label: 'Unlimited inboxes',
+  },
+  {
+    icon: 'schedule',
+    label: '7-day lifetime',
+  },
+  {
+    icon: 'tune',
+    label: 'Custom inbox',
+  },
+  {
+    icon: 'share',
+    label: 'Share inbox',
+  },
+]
+
 const handleSectionChange = (view) => {
   emit('select-view', view)
 }
@@ -126,44 +164,25 @@ const handleSectionChange = (view) => {
                     </div>
                   </div>
 
-                  <div class="row g-2 home-service__benefits">
-                    <div class="col-12 col-sm-6 d-flex">
-                      <div class="home-benefit">
-                        <strong class="home-benefit__value">
-                          1×
-                        </strong>
+                  <div
+                    class="home-service__benefits"
+                    aria-label="Send features"
+                  >
+                    <div
+                      v-for="benefit in sendBenefits"
+                      :key="benefit.label"
+                      class="home-benefit"
+                    >
+                      <span
+                        class="home-benefit__symbol material-symbols-rounded"
+                        aria-hidden="true"
+                      >
+                        {{ benefit.icon }}
+                      </span>
 
-                        <div class="home-benefit__content">
-                          <span class="home-benefit__title">
-                            Email per month
-                          </span>
-
-                          <small>
-                            One outgoing email every month
-                          </small>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-12 col-sm-6 d-flex">
-                      <div class="home-benefit">
-                        <span
-                          class="home-benefit__symbol material-symbols-rounded"
-                          aria-hidden="true"
-                        >
-                          subscriptions
-                        </span>
-
-                        <div class="home-benefit__content">
-                          <span class="home-benefit__title">
-                            Subscriptions
-                          </span>
-
-                          <small>
-                            Register on external services
-                          </small>
-                        </div>
-                      </div>
+                      <span class="home-benefit__title">
+                        {{ benefit.label }}
+                      </span>
                     </div>
                   </div>
 
@@ -208,43 +227,25 @@ const handleSectionChange = (view) => {
                     </div>
                   </div>
 
-                  <div class="row g-2 home-service__benefits">
-                    <div class="col-12 col-sm-6 d-flex">
-                      <div class="home-benefit">
-                        <strong class="home-benefit__value">
-                          ∞
-                        </strong>
+                  <div
+                    class="home-service__benefits"
+                    aria-label="Receive features"
+                  >
+                    <div
+                      v-for="benefit in receiveBenefits"
+                      :key="benefit.label"
+                      class="home-benefit"
+                    >
+                      <span
+                        class="home-benefit__symbol material-symbols-rounded"
+                        aria-hidden="true"
+                      >
+                        {{ benefit.icon }}
+                      </span>
 
-                        <div class="home-benefit__content">
-                          <span class="home-benefit__title">
-                            Temporary inboxes
-                          </span>
-
-                          <small>
-                            Create as many as you need
-                          </small>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-12 col-sm-6 d-flex">
-                      <div class="home-benefit">
-                        <strong
-                          class="home-benefit__value home-benefit__value--small"
-                        >
-                          7d
-                        </strong>
-
-                        <div class="home-benefit__content">
-                          <span class="home-benefit__title">
-                            Inbox lifetime
-                          </span>
-
-                          <small>
-                            Available for seven days
-                          </small>
-                        </div>
-                      </div>
+                      <span class="home-benefit__title">
+                        {{ benefit.label }}
+                      </span>
                     </div>
                   </div>
 
@@ -731,18 +732,21 @@ const handleSectionChange = (view) => {
   min-width: 0;
   min-height: 96px;
 
-  align-content: stretch;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 7px;
 }
 
 .home-benefit {
   width: 100%;
   min-width: 0;
-  min-height: 90px;
-  padding: 13px 14px;
+  min-height: 0;
+  padding: 7px 9px;
 
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 
   color: var(--color-ink);
   background-color: var(--color-bone);
@@ -761,26 +765,13 @@ const handleSectionChange = (view) => {
   transform: translateY(-1px);
 }
 
-.home-benefit__value,
 .home-benefit__symbol {
-  width: 46px;
-  min-width: 46px;
-  flex: 0 0 46px;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  flex: 0 0 36px;
 
   color: var(--color-ink);
-
-  font-size: 2rem;
-  font-weight: 800;
-  line-height: 1;
-  letter-spacing: -0.06em;
-  text-align: center;
-}
-
-.home-benefit__value--small {
-  font-size: 1.5rem;
-}
-
-.home-benefit__symbol {
   background-color: transparent;
 
   font-size: 28px;
@@ -789,30 +780,18 @@ const handleSectionChange = (view) => {
     "FILL" 0,
     "wght" 600,
     "GRAD" 0,
-    "opsz" 28;
-}
-
-.home-benefit__content {
-  min-width: 0;
-
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+    "opsz" 24;
 }
 
 .home-benefit__title {
+  min-width: 0;
+
   color: var(--color-ink);
 
-  font-size: 0.49rem;
+  font-size: 0.58rem;
   font-weight: 700;
-  line-height: 1.3;
-}
-
-.home-benefit__content small {
-  color: var(--color-graphite);
-
-  font-size: 0.61rem;
-  line-height: 1.4;
+  line-height: 1.25;
+  letter-spacing: 0.07em;
 }
 
 /* =========================================================
@@ -1124,16 +1103,27 @@ const handleSectionChange = (view) => {
     margin-top: 3px;
   }
 
-  .home-benefit {
-    min-height: 66px;
-    padding: 8px 10px;
+  .home-service__benefits {
+    min-height: 82px;
+    gap: 5px;
   }
 
-  .home-benefit__value,
+  .home-benefit {
+    padding: 5px 7px;
+    gap: 6px;
+  }
+
   .home-benefit__symbol {
-    width: 40px;
-    min-width: 40px;
-    flex-basis: 40px;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    flex-basis: 36px;
+
+    font-size: 28px;
+  }
+
+  .home-benefit__title {
+    font-size: 0.52rem;
   }
 
   .home-checker {
@@ -1217,49 +1207,35 @@ const handleSectionChange = (view) => {
     min-height: 280px;
     padding: 14px;
 
-    grid-template-rows: auto auto auto;
+    grid-template-rows: auto 108px auto;
     gap: 10px;
   }
 
   .home-service__benefits {
     min-height: 0;
+    height: 108px;
+
+    gap: 6px;
   }
 
   .home-benefit {
-    min-height: 58px;
-    padding: 8px 10px;
+    min-height: 0;
+    padding: 6px 8px;
 
-    gap: 8px;
-  }
-
-  .home-benefit__value,
-  .home-benefit__symbol {
-    width: 36px;
-    min-width: 36px;
-    flex-basis: 36px;
-
-    font-size: 1.55rem;
-  }
-
-  .home-benefit__value--small {
-    font-size: 1.2rem;
+    gap: 7px;
   }
 
   .home-benefit__symbol {
-    font-size: 23px;
-  }
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    flex-basis: 32px;
 
-  .home-benefit__content {
-    gap: 2px;
+    font-size: 24px;
   }
 
   .home-benefit__title {
-    font-size: 0.44rem;
-  }
-
-  .home-benefit__content small {
-    font-size: 0.56rem;
-    line-height: 1.25;
+    font-size: 0.52rem;
   }
 
   .home-checker__checks {
@@ -1295,36 +1271,34 @@ const handleSectionChange = (view) => {
     min-height: 270px;
     padding: 13px;
 
+    grid-template-rows: auto 106px auto;
     gap: 9px;
   }
 
   .home-service__benefits {
-    --bs-gutter-x: 8px;
-    --bs-gutter-y: 8px;
+    height: 106px;
+
+    gap: 6px;
   }
 
   .home-benefit {
-    min-height: 54px;
-    padding: 7px 8px;
+    padding: 6px 7px;
 
-    gap: 7px;
+    gap: 6px;
   }
 
-  .home-benefit__value,
   .home-benefit__symbol {
     width: 32px;
+    height: 32px;
     min-width: 32px;
     flex-basis: 32px;
 
-    font-size: 1.4rem;
+    font-size: 24px;
   }
 
-  .home-benefit__value--small {
-    font-size: 1.05rem;
-  }
-
-  .home-benefit__symbol {
-    font-size: 21px;
+  .home-benefit__title {
+    font-size: 0.52rem;
+    line-height: 1.2;
   }
 
   .home-checker {
@@ -1379,75 +1353,45 @@ const handleSectionChange = (view) => {
     min-height: 0;
     padding: 13px;
 
-    grid-template-rows: auto auto auto;
+    grid-template-rows: auto 118px auto;
     gap: 12px;
   }
 
   .home-service__benefits {
-    --bs-gutter-x: 0;
-    --bs-gutter-y: 8px;
-
-    display: flex;
-    flex-direction: column;
-
-    min-height: 0;
-    margin-right: 0;
-    margin-left: 0;
-  }
-
-  .home-service__benefits > [class*="col-"] {
     width: 100%;
-    max-width: none;
-    padding-right: 0;
-    padding-left: 0;
+    height: 118px;
+    min-height: 0;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    gap: 7px;
   }
 
   .home-benefit {
-    min-height: 62px;
-    padding: 9px 11px;
+    min-height: 0;
+    padding: 7px 8px;
 
     display: grid;
-    grid-template-columns: 34px minmax(0, 1fr);
+    grid-template-columns: 26px minmax(0, 1fr);
     align-items: center;
-    gap: 10px;
-  }
-
-  .home-benefit__value,
-  .home-benefit__symbol {
-    width: 34px;
-    min-width: 34px;
-    flex-basis: 34px;
-
-    font-size: 1.4rem;
-    text-align: center;
-  }
-
-  .home-benefit__value--small {
-    font-size: 1.1rem;
+    gap: 7px;
   }
 
   .home-benefit__symbol {
-    font-size: 22px;
-  }
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    flex-basis: 30px;
 
-  .home-benefit__content {
-    min-width: 0;
-
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
+    font-size: 24px;
   }
 
   .home-benefit__title {
-    font-size: 0.44rem;
-    line-height: 1.25;
-  }
+    min-width: 0;
 
-  .home-benefit__content small {
-    display: block;
-
-    font-size: 0.55rem;
-    line-height: 1.3;
+    font-size: 0.48rem;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
   }
 
   .home-service__footer {
