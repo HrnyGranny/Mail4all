@@ -37,7 +37,7 @@ const handleSectionChange = (view) => {
 
   selectedSection.value = view
 
-  if (isMobile.value) {
+  if (window.innerWidth < 992) {
     requestAnimationFrame(() => {
       document.querySelector('.main-content')?.scrollTo({
         top: 0,
@@ -235,20 +235,17 @@ onBeforeUnmount(() => {
 }
 
 /* =========================================================
-   RESPONSIVE
+   TABLET
    ========================================================= */
 
-@media (max-width: 767.98px) {
+@media (max-width: 991.98px) {
   .main-content,
   .main-content.sidebar-expanded,
   .main-content.sidebar-collapsed {
-    width: 100%;
     height: 100%;
 
-    margin-left: 0;
-    padding-top: var(--navbar-height);
-
-    display: block;
+    display: flex;
+    flex-direction: column;
 
     overflow-x: hidden;
     overflow-y: auto;
@@ -261,10 +258,10 @@ onBeforeUnmount(() => {
   .content-wrapper {
     width: 100%;
     min-width: 0;
-    min-height: calc(100dvh - var(--navbar-height));
+    min-height: 100%;
     flex: 0 0 auto;
 
-    padding: 12px;
+    padding: 20px;
 
     display: flex;
     flex-direction: column;
@@ -276,13 +273,38 @@ onBeforeUnmount(() => {
     width: 100%;
     height: auto;
     min-width: 0;
-    min-height: calc(100dvh - var(--navbar-height) - 24px);
+    min-height: 100%;
     flex: 1 0 auto;
 
     display: flex;
     flex-direction: column;
 
     overflow: visible;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 767.98px) {
+  .main-content,
+  .main-content.sidebar-expanded,
+  .main-content.sidebar-collapsed {
+    width: 100%;
+    height: 100%;
+
+    margin-left: 0;
+    padding-top: var(--navbar-height);
+  }
+
+  .content-wrapper {
+    min-height: calc(100dvh - var(--navbar-height));
+    padding: 12px;
+  }
+
+  .content-area {
+    min-height: calc(100dvh - var(--navbar-height) - 24px);
   }
 
   .section-enter-from {

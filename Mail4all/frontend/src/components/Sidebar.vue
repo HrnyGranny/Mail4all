@@ -293,7 +293,6 @@ const handleDonate = () => {
         </span>
       </button>
     </footer>
-
   </aside>
 </template>
 
@@ -367,24 +366,6 @@ const handleDonate = () => {
 .bc-sidebar__brand:hover,
 .bc-sidebar__brand:focus {
   color: var(--color-ink);
-}
-
-.bc-sidebar__brand::after {
-  content: "";
-
-  position: absolute;
-  top: -48px;
-  right: -55px;
-  z-index: 0;
-
-  width: 130px;
-  height: 130px;
-
-  background-color: #d8ff3d;
-  border-radius: 50%;
-
-  opacity: 0.8;
-  pointer-events: none;
 }
 
 .bc-sidebar__logo {
@@ -502,8 +483,8 @@ const handleDonate = () => {
   font-family: var(--font-body);
   text-align: left;
   text-decoration: none;
-  appearance: none;
 
+  appearance: none;
   cursor: pointer;
 
   transition:
@@ -514,10 +495,6 @@ const handleDonate = () => {
     box-shadow var(--transition-fast);
 }
 
-/*
- * Inactive links use --color-ink:
- * black in light mode and white in dark mode.
- */
 .bc-sidebar__link:hover,
 .bc-sidebar__link:focus-visible {
   color: var(--color-ink);
@@ -528,9 +505,6 @@ const handleDonate = () => {
   transform: translateX(2px);
 }
 
-/*
- * Active links always remain black over chartreuse.
- */
 .bc-sidebar__link--active,
 .bc-sidebar__link--active:hover,
 .bc-sidebar__link--active:focus,
@@ -615,8 +589,6 @@ const handleDonate = () => {
 }
 
 .bc-sidebar__support {
-  position: relative;
-
   padding: 12px;
 
   display: flex;
@@ -638,31 +610,11 @@ const handleDonate = () => {
 }
 
 .bc-sidebar__support:hover {
-transform: translateY(-2px);
-box-shadow: 4px 4px 0 var(--color-ink);
-}
-
-.bc-sidebar__support::after {
-  content: "";
-
-  position: absolute;
-  top: -50px;
-  right: -52px;
-
-  width: 105px;
-  height: 105px;
-
-  background-color: #d8ff3d;
-  border-radius: 50%;
-
-  opacity: 0.55;
-  pointer-events: none;
+  transform: translateY(-2px);
+  box-shadow: 4px 4px 0 var(--color-ink);
 }
 
 .bc-sidebar__support-header {
-  position: relative;
-  z-index: 1;
-
   min-width: 0;
 
   display: flex;
@@ -720,9 +672,6 @@ box-shadow: 4px 4px 0 var(--color-ink);
 }
 
 .bc-sidebar__support-description {
-  position: relative;
-  z-index: 1;
-
   margin: 0;
 
   color: var(--color-graphite);
@@ -736,9 +685,6 @@ box-shadow: 4px 4px 0 var(--color-ink);
    ========================================================= */
 
 .bc-sidebar__donate {
-  position: relative;
-  z-index: 1;
-
   width: 100%;
   height: 36px;
   padding: 0 5px 0 13px;
@@ -939,6 +885,5 @@ box-shadow: 4px 4px 0 var(--color-ink);
   .bc-sidebar--expanded {
     left: 0;
   }
-
 }
 </style>
