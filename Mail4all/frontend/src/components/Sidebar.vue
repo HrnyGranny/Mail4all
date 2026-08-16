@@ -597,7 +597,7 @@ const handleDonate = () => {
 
   background-color: var(--color-paper);
 
-  border: 1px solid var(--color-ink);
+  border: 1px dashed var(--color-ink);
   border-radius: 14px;
 
   overflow: hidden;
@@ -643,6 +643,33 @@ const handleDonate = () => {
     "wght" 500,
     "GRAD" 0,
     "opsz" 24;
+}
+
+.bc-sidebar__support:hover .bc-sidebar__support-icon {
+  animation: support-heartbeat 650ms ease-in-out;
+}
+
+@keyframes support-heartbeat {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  25% {
+    transform: scale(1.18);
+  }
+
+  45% {
+    transform: scale(1);
+  }
+
+  65% {
+    transform: scale(1.1);
+  }
+
+  85% {
+    transform: scale(1);
+  }
 }
 
 .bc-sidebar__support-heading {

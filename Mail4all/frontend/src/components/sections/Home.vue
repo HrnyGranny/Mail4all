@@ -625,7 +625,7 @@ const handleSectionChange = (view) => {
   color: var(--color-ink);
   background-color: var(--color-paper);
 
-  border: var(--border-width) solid var(--border-color);
+  border: var(--border-width) dashed var(--border-color);
   border-radius: var(--radius-lg);
 
   overflow: hidden;
@@ -849,7 +849,7 @@ const handleSectionChange = (view) => {
   color: var(--color-ink);
   background-color: var(--color-paper);
 
-  border: var(--border-width) solid var(--border-color);
+  border: var(--border-width) dashed var(--border-color);
   border-radius: var(--radius-lg);
 
   overflow: hidden;
@@ -857,7 +857,14 @@ const handleSectionChange = (view) => {
   transition:
     color var(--transition-normal),
     background-color var(--transition-normal),
-    border-color var(--transition-normal);
+    border-color var(--transition-normal),
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.home-checker:hover {
+  transform: translateY(-2px);
+  box-shadow: 4px 4px 0 var(--color-ink);
 }
 
 .home-checker__identity {
@@ -880,6 +887,16 @@ const handleSectionChange = (view) => {
   border-radius: 12px;
 
   font-size: 22px;
+
+  transition: transform var(--transition-fast);
+}
+
+.home-checker:hover .home-checker__icon {
+  transform: rotate(-4deg) scale(1.04);
+}
+
+.home-checker:hover .home-checker__icon {
+  transform: rotate(-4deg) scale(1.04);
 }
 
 .home-checker__content {
