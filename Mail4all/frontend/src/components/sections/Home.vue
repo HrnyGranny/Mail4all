@@ -13,16 +13,6 @@ const handleSectionChange = (view) => {
     <article class="home-card">
       <!-- Hero -->
       <header class="home-hero">
-        <div
-          class="home-hero__shape home-hero__shape--chartreuse"
-          aria-hidden="true"
-        ></div>
-
-        <div
-          class="home-hero__shape home-hero__shape--orange"
-          aria-hidden="true"
-        ></div>
-
         <div class="container-fluid position-relative z-1 p-0">
           <div class="row align-items-center g-4">
             <div class="col-12 col-lg-5 col-xl-6">
@@ -275,11 +265,6 @@ const handleSectionChange = (view) => {
 
             <!-- Email checker -->
             <section class="home-checker">
-              <div
-                class="home-checker__decoration"
-                aria-hidden="true"
-              ></div>
-
               <div class="row align-items-center g-3 position-relative z-1">
                 <div class="col-12 col-md-4 col-xl-3">
                   <div class="home-checker__identity">
@@ -458,39 +443,6 @@ const handleSectionChange = (view) => {
   border-bottom: var(--border-width) solid var(--border-color);
 
   overflow: hidden;
-}
-
-.home-hero__shape {
-  position: absolute;
-
-  border: var(--border-width) solid var(--color-on-accent);
-  border-radius: 50%;
-
-  pointer-events: none;
-}
-
-.home-hero__shape--chartreuse {
-  top: -210px;
-  right: -125px;
-
-  width: 320px;
-  height: 320px;
-
-  background-color: var(--color-chartreuse);
-
-  opacity: 0.58;
-}
-
-.home-hero__shape--orange {
-  right: 220px;
-  bottom: -118px;
-
-  width: 140px;
-  height: 140px;
-
-  background-color: var(--color-tangerine);
-
-  opacity: 0.65;
 }
 
 .home-hero__content {
@@ -689,29 +641,6 @@ const handleSectionChange = (view) => {
   box-shadow: 4px 4px 0 var(--color-ink);
 
   transform: translateY(-2px);
-}
-
-.home-service::after {
-  content: "";
-
-  position: absolute;
-  right: -65px;
-  bottom: -75px;
-
-  width: 135px;
-  height: 135px;
-
-  background-color: var(--color-chartreuse);
-
-  border: var(--border-width) solid var(--color-on-accent);
-  border-radius: 50%;
-
-  opacity: 0.13;
-  pointer-events: none;
-}
-
-.home-service--receive::after {
-  background-color: var(--color-tangerine);
 }
 
 .home-service__main,
@@ -950,23 +879,6 @@ const handleSectionChange = (view) => {
     color var(--transition-normal),
     background-color var(--transition-normal),
     border-color var(--transition-normal);
-}
-
-.home-checker__decoration {
-  position: absolute;
-  top: -78px;
-  right: -52px;
-
-  width: 150px;
-  height: 150px;
-
-  background-color: var(--color-chartreuse);
-
-  border: var(--border-width) solid var(--color-on-accent);
-  border-radius: 50%;
-
-  opacity: 0.24;
-  pointer-events: none;
 }
 
 .home-checker__identity {
@@ -1362,16 +1274,6 @@ const handleSectionChange = (view) => {
 @media (max-width: 767.98px) {
   .home-hero {
     padding: 22px 18px;
-  }
-
-  .home-hero__shape--chartreuse {
-    top: -195px;
-    right: -125px;
-  }
-
-  .home-hero__shape--orange {
-    right: 40px;
-    bottom: -110px;
   }
 
   .home-guarantees {
