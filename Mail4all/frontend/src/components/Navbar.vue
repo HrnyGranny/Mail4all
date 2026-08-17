@@ -61,7 +61,7 @@ onMounted(() => {
               :checked="isDarkTheme"
               aria-label="Enable dark theme"
               @change="handleThemeChange"
-            />
+            >
 
             <span
               class="bc-switch__track"
@@ -276,12 +276,13 @@ onMounted(() => {
   gap: 10px;
 }
 
-/* Icon buttons */
+/* =========================================================
+   ICON BUTTONS
+   ========================================================= */
 
 .bc-navbar__icon-button {
   --bc-accent-ink: #0e0e0c;
   --bc-accent-chartreuse: #d8ff3d;
-  --bc-accent-tangerine: #ff5a1f;
 
   position: relative;
 
@@ -306,21 +307,30 @@ onMounted(() => {
   transition:
     color var(--transition-fast),
     background-color var(--transition-fast),
+    border-color var(--transition-fast),
     transform var(--transition-fast),
     box-shadow var(--transition-fast);
 }
 
-.bc-navbar__icon-button:hover {
-  color: var(--bc-accent-chartreuse);
-  background-color: var(--bc-accent-ink);
+.bc-navbar__icon-button:hover,
+.bc-navbar__icon-button:focus-visible {
+  color: var(--bc-accent-ink);
+  background-color: var(--bc-accent-chartreuse);
+
+  border-color: var(--bc-accent-ink);
 
   transform: translateY(-2px);
 
-  box-shadow: 3px 3px 0 var(--bc-accent-tangerine);
+  box-shadow: 3px 3px 0 var(--bc-accent-ink);
+}
+
+.bc-navbar__icon-button:focus-visible {
+  outline: none;
 }
 
 .bc-navbar__icon-button:active {
   transform: translateY(0);
+
   box-shadow: none;
 }
 
@@ -328,10 +338,16 @@ onMounted(() => {
   width: 22px;
   height: 22px;
 
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
   font-size: 22px;
 }
 
-/* Theme switch */
+/* =========================================================
+   THEME SWITCH
+   ========================================================= */
 
 .bc-switch {
   position: relative;
@@ -457,7 +473,9 @@ onMounted(() => {
   outline-offset: 3px;
 }
 
-/* Notification badge */
+/* =========================================================
+   NOTIFICATION BADGE
+   ========================================================= */
 
 .bc-navbar__badge {
   position: absolute;
@@ -484,7 +502,9 @@ onMounted(() => {
   line-height: 1;
 }
 
-/* Notification dropdown */
+/* =========================================================
+   NOTIFICATION DROPDOWN
+   ========================================================= */
 
 .bc-dropdown {
   margin-top: 12px !important;
@@ -566,7 +586,9 @@ onMounted(() => {
   flex-direction: column;
 }
 
-/* Notification items */
+/* =========================================================
+   NOTIFICATION ITEMS
+   ========================================================= */
 
 .bc-notification {
   width: 100%;
@@ -678,10 +700,13 @@ onMounted(() => {
 .bc-notification:hover .bc-notification__arrow,
 .bc-notification:focus .bc-notification__arrow {
   opacity: 1;
+
   transform: translateX(0);
 }
 
-/* Dropdown action */
+/* =========================================================
+   DROPDOWN ACTION
+   ========================================================= */
 
 .bc-dropdown__action {
   width: 100%;
@@ -724,7 +749,22 @@ onMounted(() => {
   transform: translateX(4px);
 }
 
-/* Responsive */
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .bc-navbar__icon-button,
+  .bc-navbar__icon-button:hover,
+  .bc-navbar__icon-button:focus-visible,
+  .bc-navbar__icon-button:active {
+    transform: none;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
 
 @media (max-width: 767.98px) {
   .bc-navbar {
@@ -753,7 +793,9 @@ onMounted(() => {
     width: 64px;
   }
 
-  .bc-switch__input:checked + .bc-switch__track .bc-switch__thumb {
+  .bc-switch__input:checked
+    + .bc-switch__track
+    .bc-switch__thumb {
     left: 31px;
   }
 }
@@ -780,7 +822,9 @@ onMounted(() => {
     height: 26px;
   }
 
-  .bc-switch__input:checked + .bc-switch__track .bc-switch__thumb {
+  .bc-switch__input:checked
+    + .bc-switch__track
+    .bc-switch__thumb {
     left: 29px;
   }
 }

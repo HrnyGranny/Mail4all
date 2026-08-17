@@ -1,19 +1,7 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 
-import Dropmail from '@/components/sections/send/dropmail/Dropmail.vue'
-import Subscribe from '@/components/sections/send/subscribe/Subscribe.vue'
-
-const MODES = {
-  DROPMAIL: 'dropmail',
-  SUBSCRIBE: 'subscribe',
-}
-
-const activeMode = ref(MODES.DROPMAIL)
-
-const activeComponent = computed(() => {
-  return activeMode.value === MODES.DROPMAIL ? Dropmail : Subscribe
-})
+const activeMode = ref('base')
 
 const selectMode = (mode) => {
   activeMode.value = mode
@@ -23,99 +11,82 @@ const selectMode = (mode) => {
 <template>
   <section class="send-section">
     <article class="send-card">
-      <header class="send-card__header">
-        <div class="send-card__heading">
-          <span class="send-card__eyebrow">
-            Mail workspace
-          </span>
+      <header class="send-header">
+        <div class="send-header__identity">
+          <div class="send-header__content">
+            <span class="send-header__eyebrow">
+              Mail workspace
+            </span>
 
-          <h2 class="send-card__title">
-            Send workspace
-          </h2>
+            <h1 class="send-header__title">
+              Send
+            </h1>
+          </div>
         </div>
 
         <div
-          class="send-toggle"
+          class="send-mode"
           role="tablist"
-          aria-label="Send workspace mode"
+          aria-label="Send mode"
         >
           <span
-            class="send-toggle__slider"
+            class="send-mode__slider"
             :class="{
-              'send-toggle__slider--subscribe':
-                activeMode === MODES.SUBSCRIBE,
+              'send-mode__slider--api': activeMode === 'api',
             }"
             aria-hidden="true"
           ></span>
 
           <button
             type="button"
-            class="send-toggle__option"
+            class="send-mode__option"
             :class="{
-              'send-toggle__option--active':
-                activeMode === MODES.DROPMAIL,
+              'send-mode__option--active': activeMode === 'base',
             }"
             role="tab"
-            :aria-selected="activeMode === MODES.DROPMAIL"
+            :aria-selected="activeMode === 'base'"
             aria-controls="send-mode-panel"
-            @click="selectMode(MODES.DROPMAIL)"
+            @click="selectMode('base')"
           >
             <span
-              class="send-toggle__icon material-symbols-rounded"
+              class="send-mode__icon material-symbols-rounded"
               aria-hidden="true"
             >
               send
             </span>
 
-            <span class="send-toggle__label">
-              Dropmail
-            </span>
+            <span>Base</span>
           </button>
 
           <button
             type="button"
-            class="send-toggle__option"
+            class="send-mode__option"
             :class="{
-              'send-toggle__option--active':
-                activeMode === MODES.SUBSCRIBE,
+              'send-mode__option--active': activeMode === 'api',
             }"
             role="tab"
-            :aria-selected="activeMode === MODES.SUBSCRIBE"
+            :aria-selected="activeMode === 'api'"
             aria-controls="send-mode-panel"
-            @click="selectMode(MODES.SUBSCRIBE)"
+            @click="selectMode('api')"
           >
             <span
-              class="send-toggle__icon material-symbols-rounded"
+              class="send-mode__icon material-symbols-rounded"
               aria-hidden="true"
             >
-              mark_email_unread
+              code
             </span>
 
-            <span class="send-toggle__label">
-              Subscribe
-            </span>
+            <span>API</span>
           </button>
         </div>
       </header>
 
       <div
         id="send-mode-panel"
-        class="send-card__body"
+        class="send-content"
         role="tabpanel"
         tabindex="0"
-      >
-        <Transition
-          name="mode"
-          mode="out-in"
-        >
-          <KeepAlive>
-            <component
-              :is="activeComponent"
-              :key="activeMode"
-            />
-          </KeepAlive>
-        </Transition>
-      </div>
+      ></div>
     </article>
   </section>
 </template>
@@ -129,7 +100,8 @@ const selectMode = (mode) => {
   min-width: 0;
   min-height: 0;
 
-  display: flex;
+  padding: 0 0 6px;
+
   display: flex;
 
   overflow: hidden;
@@ -143,77 +115,61 @@ const selectMode = (mode) => {
   min-width: 0;
   min-height: 0;
 
-  display: grid;
-  grid-template-rows: minmax(112px, 20%) minmax(0, 80%);
+  display: flex;
+  flex-direction: column;
 
   color: var(--color-ink);
   background-color: var(--color-bone);
 
-  border: var(--border-width) solid var(--color-ink);
-  border-radius: 24px;
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--radius-lg);
+
+  box-shadow: var(--shadow-sm);
 
   overflow: hidden;
 
   transition:
     color var(--transition-normal),
     background-color var(--transition-normal),
-    border-color var(--transition-normal),
-    box-shadow var(--transition-normal);
+    border-color var(--transition-normal);
 }
 
-.send-card:hover {
-  box-shadow: var(--shadow-lg);
-}
+/* =========================================================
+   HEADER
+   ========================================================= */
 
-.send-card__header {
-  position: relative;
-
+.send-header {
+  width: 100%;
   min-width: 0;
-  min-height: 0;
-  padding: clamp(18px, 2.4vw, 28px);
+  min-height: 104px;
+  padding: 18px 28px;
 
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  justify-content: space-between;
-  gap: 24px;
+  column-gap: clamp(24px, 4vw, 52px);
 
   background-color: var(--color-bone);
 
-  border-bottom: var(--border-width) solid var(--color-ink);
-
-  overflow: hidden;
+  border-bottom: var(--border-width) solid var(--border-color);
 }
 
-.send-card__header::after {
-  content: "";
-
-  position: absolute;
-  top: -90px;
-  right: -55px;
-
-  width: 190px;
-  height: 190px;
-
-  background-color: #d8ff3d;
-  border: var(--border-width) solid #0e0e0c;
-  border-radius: 50%;
-
-  opacity: 0.6;
-  pointer-events: none;
+.send-header__identity {
+  min-width: 0;
 }
 
-.send-card__heading {
-  position: relative;
-  z-index: 1;
-
+.send-header__content {
   min-width: 0;
 
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  justify-content: center;
+  gap: 5px;
 }
 
-.send-card__eyebrow {
+.send-header__eyebrow {
+  display: block;
+
   color: var(--color-graphite);
 
   font-family: var(--font-mono);
@@ -224,37 +180,40 @@ const selectMode = (mode) => {
   text-transform: uppercase;
 }
 
-.send-card__title {
+.send-header__title {
   margin: 0;
 
   color: var(--color-ink);
 
-  font-size: clamp(1.35rem, 2.4vw, 2rem);
+  font-size: clamp(1.65rem, 2.5vw, 2.2rem);
   font-weight: 800;
   line-height: 1;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.055em;
 }
 
-.send-toggle {
-  position: relative;
-  z-index: 1;
+/* =========================================================
+   MODE SELECTOR
+   ========================================================= */
 
-  width: min(100%, 340px);
-  height: 52px;
+.send-mode {
+  position: relative;
+
+  width: 224px;
+  height: 50px;
   padding: 4px;
 
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
 
-  background-color: var(--color-bone);
+  background-color: var(--color-paper);
 
-  border: var(--border-width) solid var(--color-ink);
+  border: var(--border-width) solid var(--border-color);
   border-radius: var(--radius-pill);
 
   overflow: hidden;
 }
 
-.send-toggle__slider {
+.send-mode__slider {
   position: absolute;
   top: 4px;
   bottom: 4px;
@@ -263,21 +222,25 @@ const selectMode = (mode) => {
 
   width: calc(50% - 4px);
 
-  background-color: #d8ff3d;
+  background-color: var(--color-chartreuse);
 
-  border: 1px solid #0e0e0c;
+  border: 1px solid var(--color-on-accent);
   border-radius: var(--radius-pill);
 
-  box-shadow: 2px 2px 0 #0e0e0c;
+  box-shadow: 2px 2px 0 var(--color-on-accent);
+
+  transform: translateX(0);
 
   transition: transform 260ms var(--ease-boldcase);
+
+  pointer-events: none;
 }
 
-.send-toggle__slider--subscribe {
+.send-mode__slider--api {
   transform: translateX(100%);
 }
 
-.send-toggle__option {
+.send-mode__option {
   position: relative;
   z-index: 1;
 
@@ -285,19 +248,19 @@ const selectMode = (mode) => {
   height: 100%;
   padding: 0 14px;
 
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 7px;
 
-  color: var(--color-ink);
+  color: var(--color-graphite);
   background-color: transparent;
 
   border: none;
   border-radius: var(--radius-pill);
 
   font-family: var(--font-body);
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   font-weight: 700;
   line-height: 1;
   white-space: nowrap;
@@ -310,156 +273,203 @@ const selectMode = (mode) => {
     transform var(--transition-fast);
 }
 
-.send-toggle__option:hover {
+.send-mode__option:hover {
+  color: var(--color-ink);
+
   transform: translateY(-1px);
 }
 
-.send-toggle__option--active {
-  color: #0e0e0c;
+.send-mode__option--active,
+.send-mode__option--active:hover {
+  color: var(--color-on-accent);
+
+  transform: none;
 }
 
-.send-toggle__icon {
-  width: 19px;
-  height: 19px;
-  flex: 0 0 19px;
+.send-mode__icon {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
 
   color: currentColor;
 
   font-size: 19px;
+
   font-variation-settings:
     "FILL" 0,
-    "wght" 500,
+    "wght" 600,
     "GRAD" 0,
     "opsz" 20;
 }
 
-.send-toggle__label {
-  min-width: 0;
+/* =========================================================
+   CONTENT
+   ========================================================= */
 
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
+.send-content {
+  flex: 1 1 auto;
 
-.send-card__body {
-  position: relative;
-
+  width: 100%;
   min-width: 0;
   min-height: 0;
-  padding: clamp(18px, 2.5vw, 30px);
-
-  display: flex;
 
   background-color: var(--color-bone);
-
-  overflow: hidden;
 }
 
-.mode-enter-active,
-.mode-leave-active {
-  transition:
-    opacity 180ms var(--ease-boldcase),
-    transform 180ms var(--ease-boldcase);
-}
-
-.mode-enter-from {
-  opacity: 0;
-  transform: translateY(8px);
-}
-
-.mode-leave-to {
-  opacity: 0;
-  transform: translateY(-8px);
-}
+/* =========================================================
+   LOW HEIGHT
+   ========================================================= */
 
 @media (max-height: 650px) and (min-width: 768px) {
-  .send-card {
-    grid-template-rows: 96px minmax(0, 1fr);
+  .send-header {
+    min-height: 86px;
+    padding: 12px 24px;
   }
 
-  .send-card__header {
-    padding: 14px 22px;
+  .send-header__content {
+    gap: 3px;
   }
 
-  .send-card__title {
-    font-size: 1.4rem;
+  .send-header__eyebrow {
+    font-size: 0.56rem;
   }
 
-  .send-toggle {
-    height: 46px;
+  .send-header__title {
+    font-size: 1.5rem;
   }
 
-  .send-card__body {
-    padding: 18px;
-  }
-}
-
-@media (max-width: 767.98px) {
-  .send-card {
-    grid-template-rows: auto minmax(0, 1fr);
-
-    border-radius: var(--radius-lg);
+  .send-mode {
+    width: 210px;
+    height: 44px;
   }
 
-  .send-card__header {
-    min-height: 136px;
-    padding: 18px;
-
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: center;
-    gap: 14px;
-  }
-
-  .send-card__header::after {
-    top: -115px;
-    right: -70px;
-  }
-
-  .send-card__heading {
-    padding-right: 65px;
-  }
-
-  .send-card__title {
-    font-size: 1.45rem;
-  }
-
-  .send-toggle {
-    width: 100%;
-    max-width: none;
-  }
-
-  .send-card__body {
-    padding: 16px;
-  }
-}
-
-@media (max-width: 420px) {
-  .send-card__header {
-    padding: 15px;
-  }
-
-  .send-card__body {
-    padding: 12px;
-  }
-
-  .send-toggle {
-    height: 48px;
-  }
-
-  .send-toggle__option {
-    padding: 0 10px;
-    gap: 6px;
+  .send-mode__option {
+    padding: 0 12px;
 
     font-size: 0.7rem;
   }
+}
 
-  .send-toggle__icon {
-    width: 17px;
-    height: 17px;
-    flex-basis: 17px;
+/* =========================================================
+   TABLET
+   ========================================================= */
 
-    font-size: 17px;
+@media (max-width: 991.98px) {
+  .send-section {
+    height: auto;
+    min-height: 100%;
+    flex: 0 0 auto;
+
+    overflow: visible;
+  }
+
+  .send-card {
+    height: auto;
+    min-height: 100%;
+  }
+
+  .send-header {
+    min-height: 92px;
+    padding: 14px 22px;
+
+    grid-template-columns: minmax(0, 1fr) 210px;
+    column-gap: 20px;
+  }
+
+  .send-header__content {
+    gap: 4px;
+  }
+
+  .send-header__title {
+    font-size: clamp(1.55rem, 3vw, 1.9rem);
+  }
+
+  .send-mode {
+    width: 210px;
+    height: 46px;
+  }
+
+  .send-mode__option {
+    padding: 0 12px;
+  }
+
+  .send-content {
+    min-height: 420px;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 767.98px) {
+  .send-header {
+    min-height: 0;
+    padding: 16px 18px;
+
+    grid-template-columns: minmax(0, 1fr);
+    align-items: stretch;
+    row-gap: 14px;
+  }
+
+  .send-header__content {
+    gap: 4px;
+  }
+
+  .send-header__title {
+    font-size: 1.7rem;
+  }
+
+  .send-mode {
+    width: 100%;
+    height: 46px;
+  }
+
+  .send-mode__option {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 575.98px) {
+  .send-header {
+    padding: 14px 16px;
+    row-gap: 12px;
+  }
+
+  .send-header__eyebrow {
+    font-size: 0.54rem;
+  }
+
+  .send-header__title {
+    font-size: 1.6rem;
+  }
+
+  .send-mode {
+    height: 44px;
+  }
+
+  .send-mode__option {
+    padding: 0 10px;
+    gap: 6px;
+
+    font-size: 0.68rem;
+  }
+
+  .send-mode__icon {
+    width: 18px;
+    height: 18px;
+    flex-basis: 18px;
+
+    font-size: 18px;
+  }
+
+  .send-content {
+    min-height: 360px;
   }
 }
 </style>

@@ -141,12 +141,13 @@ const selectMode = (mode) => {
 .receive-header {
   width: 100%;
   min-width: 0;
-  padding: clamp(18px, 2.5vw, 30px);
+  min-height: 104px;
+  padding: 18px 28px;
 
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  justify-content: space-between;
-  gap: 24px;
+  column-gap: clamp(24px, 4vw, 52px);
 
   background-color: var(--color-bone);
 
@@ -155,18 +156,19 @@ const selectMode = (mode) => {
 
 .receive-header__identity {
   min-width: 0;
-
-  display: flex;
-  align-items: flex-start;
 }
 
 .receive-header__content {
   min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
 }
 
 .receive-header__eyebrow {
   display: block;
-  margin-bottom: 4px;
 
   color: var(--color-graphite);
 
@@ -183,7 +185,7 @@ const selectMode = (mode) => {
 
   color: var(--color-ink);
 
-  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-size: clamp(1.65rem, 2.5vw, 2.2rem);
   font-weight: 800;
   line-height: 1;
   letter-spacing: -0.055em;
@@ -196,8 +198,7 @@ const selectMode = (mode) => {
 .receive-mode {
   position: relative;
 
-  flex: 0 0 auto;
-  width: min(100%, 220px);
+  width: 224px;
   height: 50px;
   padding: 4px;
 
@@ -245,7 +246,7 @@ const selectMode = (mode) => {
 
   min-width: 0;
   height: 100%;
-  padding: 0 15px;
+  padding: 0 14px;
 
   display: inline-flex;
   align-items: center;
@@ -261,6 +262,8 @@ const selectMode = (mode) => {
   font-family: var(--font-body);
   font-size: 0.72rem;
   font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
 
   appearance: none;
   cursor: pointer;
@@ -314,6 +317,40 @@ const selectMode = (mode) => {
 }
 
 /* =========================================================
+   LOW HEIGHT
+   ========================================================= */
+
+@media (max-height: 650px) and (min-width: 768px) {
+  .receive-header {
+    min-height: 86px;
+    padding: 12px 24px;
+  }
+
+  .receive-header__content {
+    gap: 3px;
+  }
+
+  .receive-header__eyebrow {
+    font-size: 0.56rem;
+  }
+
+  .receive-header__title {
+    font-size: 1.5rem;
+  }
+
+  .receive-mode {
+    width: 210px;
+    height: 44px;
+  }
+
+  .receive-mode__option {
+    padding: 0 12px;
+
+    font-size: 0.7rem;
+  }
+}
+
+/* =========================================================
    TABLET
    ========================================================= */
 
@@ -332,7 +369,28 @@ const selectMode = (mode) => {
   }
 
   .receive-header {
-    align-items: flex-start;
+    min-height: 92px;
+    padding: 14px 22px;
+
+    grid-template-columns: minmax(0, 1fr) 210px;
+    column-gap: 20px;
+  }
+
+  .receive-header__content {
+    gap: 4px;
+  }
+
+  .receive-header__title {
+    font-size: clamp(1.55rem, 3vw, 1.9rem);
+  }
+
+  .receive-mode {
+    width: 210px;
+    height: 46px;
+  }
+
+  .receive-mode__option {
+    padding: 0 12px;
   }
 
   .receive-content {
@@ -346,16 +404,25 @@ const selectMode = (mode) => {
 
 @media (max-width: 767.98px) {
   .receive-header {
-    padding: 18px;
+    min-height: 0;
+    padding: 16px 18px;
 
-    flex-direction: column;
+    grid-template-columns: minmax(0, 1fr);
     align-items: stretch;
-    gap: 18px;
+    row-gap: 14px;
+  }
+
+  .receive-header__content {
+    gap: 4px;
+  }
+
+  .receive-header__title {
+    font-size: 1.7rem;
   }
 
   .receive-mode {
     width: 100%;
-    max-width: none;
+    height: 46px;
   }
 
   .receive-mode__option {
@@ -370,21 +437,35 @@ const selectMode = (mode) => {
 
 @media (max-width: 575.98px) {
   .receive-header {
-    padding: 16px;
+    padding: 14px 16px;
+    row-gap: 12px;
+  }
+
+  .receive-header__eyebrow {
+    font-size: 0.54rem;
   }
 
   .receive-header__title {
-    font-size: 1.65rem;
+    font-size: 1.6rem;
   }
 
   .receive-mode {
-    height: 46px;
+    height: 44px;
   }
 
   .receive-mode__option {
-    padding: 0 12px;
+    padding: 0 10px;
+    gap: 6px;
 
     font-size: 0.68rem;
+  }
+
+  .receive-mode__icon {
+    width: 18px;
+    height: 18px;
+    flex-basis: 18px;
+
+    font-size: 18px;
   }
 
   .receive-content {
