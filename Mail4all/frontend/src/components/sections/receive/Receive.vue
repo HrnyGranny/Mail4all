@@ -1,10 +1,35 @@
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
-const activeMode = ref('base')
+import Email from '@/components/sections/receive/Email.vue'
+import Graph from '@/components/sections/receive/Graph.vue'
+import Inbox from '@/components/sections/receive/Inbox.vue'
+
+const MODES = {
+  BASE: 'base',
+  API: 'api',
+}
+
+const activeMode = ref(MODES.BASE)
+
+const activeModeLabel = computed(() => {
+  return activeMode.value === MODES.BASE ? 'Base' : 'API'
+})
 
 const selectMode = (mode) => {
+  if (!Object.values(MODES).includes(mode)) {
+    return
+  }
+
   activeMode.value = mode
+}
+
+const handleEditEmail = (email) => {
+  console.info('Edit temporary email:', email)
+}
+
+const handleShareEmail = (email) => {
+  console.info('Share temporary email:', email)
 }
 </script>
 
@@ -32,7 +57,7 @@ const selectMode = (mode) => {
           <span
             class="receive-mode__slider"
             :class="{
-              'receive-mode__slider--api': activeMode === 'api',
+              'receive-mode__slider--api': activeMode === MODES.API,
             }"
             aria-hidden="true"
           ></span>
@@ -41,12 +66,13 @@ const selectMode = (mode) => {
             type="button"
             class="receive-mode__option"
             :class="{
-              'receive-mode__option--active': activeMode === 'base',
+              'receive-mode__option--active':
+                activeMode === MODES.BASE,
             }"
             role="tab"
-            :aria-selected="activeMode === 'base'"
+            :aria-selected="activeMode === MODES.BASE"
             aria-controls="receive-mode-panel"
-            @click="selectMode('base')"
+            @click="selectMode(MODES.BASE)"
           >
             <span
               class="receive-mode__icon material-symbols-rounded"
@@ -62,12 +88,13 @@ const selectMode = (mode) => {
             type="button"
             class="receive-mode__option"
             :class="{
-              'receive-mode__option--active': activeMode === 'api',
+              'receive-mode__option--active':
+                activeMode === MODES.API,
             }"
             role="tab"
-            :aria-selected="activeMode === 'api'"
+            :aria-selected="activeMode === MODES.API"
             aria-controls="receive-mode-panel"
-            @click="selectMode('api')"
+            @click="selectMode(MODES.API)"
           >
             <span
               class="receive-mode__icon material-symbols-rounded"
@@ -86,7 +113,21 @@ const selectMode = (mode) => {
         class="receive-content"
         role="tabpanel"
         tabindex="0"
-      ></div>
+        :aria-label="`${activeModeLabel} receive mode`"
+      >
+        <div class="receive-content__top">
+          <Email
+            class="receive-content__email"
+            email="demo@mail4all.app"
+            @edit="handleEditEmail"
+            @share="handleShareEmail"
+          />
+
+          <Graph class="receive-content__graph" />
+        </div>
+
+        <Inbox class="receive-content__inbox" />
+      </div>
     </article>
   </section>
 </template>
@@ -312,8 +353,32 @@ const selectMode = (mode) => {
   width: 100%;
   min-width: 0;
   min-height: 0;
+  padding: clamp(14px, 1.8vw, 22px);
+
+  display: grid;
+  grid-template-rows: minmax(165px, 1fr) minmax(0, 2fr);
+  gap: clamp(12px, 1.4vw, 18px);
 
   background-color: var(--color-bone);
+
+  overflow: hidden;
+}
+
+.receive-content__top {
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+
+  display: grid;
+  grid-template-columns: minmax(240px, 1fr) minmax(0, 2fr);
+  gap: clamp(12px, 1.4vw, 18px);
+}
+
+.receive-content__email,
+.receive-content__graph,
+.receive-content__inbox {
+  min-width: 0;
+  min-height: 0;
 }
 
 /* =========================================================
@@ -347,6 +412,17 @@ const selectMode = (mode) => {
     padding: 0 12px;
 
     font-size: 0.7rem;
+  }
+
+  .receive-content {
+    padding: 12px;
+
+    grid-template-rows: minmax(140px, 1fr) minmax(0, 2fr);
+    gap: 10px;
+  }
+
+  .receive-content__top {
+    gap: 10px;
   }
 }
 
@@ -394,7 +470,23 @@ const selectMode = (mode) => {
   }
 
   .receive-content {
-    min-height: 420px;
+    height: auto;
+    min-height: 680px;
+
+    grid-template-rows: 200px minmax(400px, auto);
+
+    overflow: visible;
+  }
+
+  .receive-content__top {
+    height: 200px;
+    min-height: 200px;
+
+    grid-template-columns: minmax(220px, 1fr) minmax(0, 2fr);
+  }
+
+  .receive-content__inbox {
+    min-height: 400px;
   }
 }
 
@@ -428,6 +520,50 @@ const selectMode = (mode) => {
   .receive-mode__option {
     width: 100%;
     min-width: 0;
+  }
+
+  .receive-content {
+    height: auto;
+    min-height: 0;
+    padding: 14px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+
+    overflow: visible;
+  }
+
+  .receive-content__top {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    flex: 0 0 auto;
+
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .receive-content__email {
+    width: 100%;
+    height: auto;
+    min-height: 170px;
+    flex: 0 0 auto;
+  }
+
+  .receive-content__graph {
+    width: 100%;
+    height: auto;
+    min-height: 230px;
+    flex: 0 0 auto;
+  }
+
+  .receive-content__inbox {
+    width: 100%;
+    height: auto;
+    min-height: 480px;
+    flex: 0 0 auto;
   }
 }
 
@@ -469,7 +605,25 @@ const selectMode = (mode) => {
   }
 
   .receive-content {
-    min-height: 360px;
+    padding: 11px;
+
+    gap: 11px;
+  }
+
+  .receive-content__top {
+    gap: 11px;
+  }
+
+  .receive-content__email {
+    min-height: 165px;
+  }
+
+  .receive-content__graph {
+    min-height: 220px;
+  }
+
+  .receive-content__inbox {
+    min-height: 470px;
   }
 }
 </style>
