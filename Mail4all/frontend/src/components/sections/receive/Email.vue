@@ -429,18 +429,6 @@ onBeforeUnmount(() => {
 
   border: var(--border-width) solid var(--border-color);
   border-radius: var(--radius-md);
-
-  transition:
-    color var(--transition-normal),
-    background-color var(--transition-normal),
-    border-color var(--transition-normal),
-    box-shadow var(--transition-fast);
-}
-
-.receive-email__field:focus-within {
-  border-color: var(--color-tangerine);
-
-  box-shadow: 3px 3px 0 var(--color-tangerine);
 }
 
 .receive-email__field-icon {
@@ -474,6 +462,10 @@ onBeforeUnmount(() => {
   cursor: text;
 }
 
+/* =========================================================
+   COPY BUTTON
+   ========================================================= */
+
 .receive-email__copy {
   width: 32px;
   height: 32px;
@@ -483,8 +475,8 @@ onBeforeUnmount(() => {
   align-items: center;
   justify-content: center;
 
-  color: var(--color-chartreuse);
-  background-color: var(--color-on-accent);
+  color: var(--color-on-accent);
+  background-color: var(--color-chartreuse);
 
   border: 1px solid var(--color-on-accent);
   border-radius: 10px;
@@ -493,9 +485,6 @@ onBeforeUnmount(() => {
   cursor: pointer;
 
   transition:
-    color var(--transition-fast),
-    background-color var(--transition-fast),
-    border-color var(--transition-fast),
     transform var(--transition-fast),
     box-shadow var(--transition-fast);
 }
