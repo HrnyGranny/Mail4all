@@ -227,8 +227,6 @@ const selectMode = (mode) => {
   border: 1px solid var(--color-on-accent);
   border-radius: var(--radius-pill);
 
-  box-shadow: 2px 2px 0 var(--color-on-accent);
-
   transform: translateX(0);
 
   transition: transform 260ms var(--ease-boldcase);

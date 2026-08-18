@@ -149,9 +149,6 @@ const handleSectionChange = (view) => {
                     </span>
 
                     <div class="home-service__content">
-                      <span class="home-service__eyebrow">
-                        Outgoing email
-                      </span>
 
                       <h2 class="home-service__title">
                         Send
@@ -212,9 +209,6 @@ const handleSectionChange = (view) => {
                     </span>
 
                     <div class="home-service__content">
-                      <span class="home-service__eyebrow">
-                        Incoming email
-                      </span>
 
                       <h2 class="home-service__title">
                         Receive
@@ -278,9 +272,6 @@ const handleSectionChange = (view) => {
 
                     <div class="home-checker__content">
                       <div class="home-checker__heading">
-                        <span class="home-checker__eyebrow">
-                          Verify an email
-                        </span>
 
                         <span class="home-checker__badge">
                           In development

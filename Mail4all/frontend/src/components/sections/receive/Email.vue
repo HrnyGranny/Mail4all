@@ -235,22 +235,12 @@ onBeforeUnmount(() => {
         type="button"
         variant="primary"
         size="small"
-        :arrow="false"
         :block="true"
         :disabled="!hasEmail || loading"
         aria-label="Edit temporary email address"
         @click="handleEdit"
       >
-        <span
-          class="receive-email__button-content"
-          aria-hidden="true"
-        >
-          <span class="material-symbols-rounded">
-            edit
-          </span>
-
-          <span>Edit</span>
-        </span>
+        Edit
       </BaseButton>
 
       <BaseButton
@@ -258,22 +248,12 @@ onBeforeUnmount(() => {
         type="button"
         variant="primary"
         size="small"
-        :arrow="false"
         :block="true"
         :disabled="!hasEmail || loading"
         aria-label="Share temporary inbox"
         @click="handleShare"
       >
-        <span
-          class="receive-email__button-content"
-          aria-hidden="true"
-        >
-          <span class="material-symbols-rounded">
-            share
-          </span>
-
-          <span>Share</span>
-        </span>
+        Share
       </BaseButton>
     </footer>
   </article>
@@ -546,31 +526,43 @@ onBeforeUnmount(() => {
 .receive-email__actions :deep(.bc-button) {
   width: 100%;
   min-width: 0;
-  height: 34px;
-  padding: 0 10px;
+  height: 40px;
+  padding: 0 5px 0 13px;
+  gap: 7px;
 }
 
 .receive-email__actions :deep(.bc-button__label) {
-  width: 100%;
-
-  text-align: center;
-}
-
-.receive-email__button-content {
   min-width: 0;
 
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
+  text-align: left;
 }
 
-.receive-email__button-content .material-symbols-rounded {
-  width: 17px;
-  height: 17px;
-  flex: 0 0 17px;
+/*
+ * Keep the arrow 1px to the left in its resting position.
+ * BaseButton already provides the transition for the transform property.
+ */
+.receive-email__actions :deep(.bc-button__icon) {
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
 
-  font-size: 17px;
+  transform: translateX(-1px);
+}
+
+.receive-email__actions :deep(.bc-button__icon svg) {
+  width: 14px;
+  height: 14px;
+}
+
+/*
+ * Override BaseButton's default 4px hover movement.
+ * Move the arrow only 1px to the right.
+ */
+.receive-email__actions
+  :deep(
+    .bc-button:hover:not(.bc-button--unavailable) .bc-button__icon
+  ) {
+  transform: translateX(1px);
 }
 
 /* =========================================================
@@ -602,8 +594,31 @@ onBeforeUnmount(() => {
   }
 
   .receive-email__actions :deep(.bc-button) {
-    height: 30px;
-    padding: 0 8px;
+    height: 36px;
+    padding: 0 4px 0 11px;
+    gap: 6px;
+
+    font-size: 0.72rem;
+  }
+
+  .receive-email__actions :deep(.bc-button__icon) {
+    width: 27px;
+    height: 27px;
+    flex-basis: 27px;
+
+    transform: translateX(-1px);
+  }
+
+  .receive-email__actions :deep(.bc-button__icon svg) {
+    width: 13px;
+    height: 13px;
+  }
+
+  .receive-email__actions
+    :deep(
+      .bc-button:hover:not(.bc-button--unavailable) .bc-button__icon
+    ) {
+    transform: translateX(1px);
   }
 }
 
@@ -630,7 +645,23 @@ onBeforeUnmount(() => {
   }
 
   .receive-email__actions :deep(.bc-button) {
-    height: 38px;
+    height: 40px;
+    padding: 0 5px 0 13px;
+  }
+
+  .receive-email__actions :deep(.bc-button__icon) {
+    width: 30px;
+    height: 30px;
+    flex-basis: 30px;
+
+    transform: translateX(-1px);
+  }
+
+  .receive-email__actions
+    :deep(
+      .bc-button:hover:not(.bc-button--unavailable) .bc-button__icon
+    ) {
+    transform: translateX(1px);
   }
 }
 
@@ -657,22 +688,31 @@ onBeforeUnmount(() => {
   }
 
   .receive-email__actions :deep(.bc-button) {
-    height: 36px;
-    padding: 0 8px;
+    height: 38px;
+    padding: 0 4px 0 11px;
+    gap: 6px;
 
     font-size: 0.72rem;
   }
 
-  .receive-email__button-content {
-    gap: 5px;
+  .receive-email__actions :deep(.bc-button__icon) {
+    width: 28px;
+    height: 28px;
+    flex-basis: 28px;
+
+    transform: translateX(-1px);
   }
 
-  .receive-email__button-content .material-symbols-rounded {
-    width: 16px;
-    height: 16px;
-    flex-basis: 16px;
+  .receive-email__actions :deep(.bc-button__icon svg) {
+    width: 13px;
+    height: 13px;
+  }
 
-    font-size: 16px;
+  .receive-email__actions
+    :deep(
+      .bc-button:hover:not(.bc-button--unavailable) .bc-button__icon
+    ) {
+    transform: translateX(1px);
   }
 }
 </style>

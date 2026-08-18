@@ -78,7 +78,7 @@ const handleShareEmail = (email) => {
               class="receive-mode__icon material-symbols-rounded"
               aria-hidden="true"
             >
-              dashboard
+              inbox
             </span>
 
             <span>Base</span>
@@ -267,8 +267,6 @@ const handleShareEmail = (email) => {
 
   border: 1px solid var(--color-on-accent);
   border-radius: var(--radius-pill);
-
-  box-shadow: 2px 2px 0 var(--color-on-accent);
 
   transform: translateX(0);
 
