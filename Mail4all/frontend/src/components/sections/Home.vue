@@ -149,7 +149,6 @@ const handleSectionChange = (view) => {
                     </span>
 
                     <div class="home-service__content">
-
                       <h2 class="home-service__title">
                         Send
                       </h2>
@@ -188,6 +187,7 @@ const handleSectionChange = (view) => {
                       type="button"
                       variant="primary"
                       size="small"
+                      :block="true"
                       aria-label="Open the send email service"
                       @click="handleSectionChange('send')"
                     >
@@ -209,7 +209,6 @@ const handleSectionChange = (view) => {
                     </span>
 
                     <div class="home-service__content">
-
                       <h2 class="home-service__title">
                         Receive
                       </h2>
@@ -248,6 +247,7 @@ const handleSectionChange = (view) => {
                       type="button"
                       variant="primary"
                       size="small"
+                      :block="true"
                       aria-label="Open the temporary inbox service"
                       @click="handleSectionChange('receive')"
                     >
@@ -272,7 +272,6 @@ const handleSectionChange = (view) => {
 
                     <div class="home-checker__content">
                       <div class="home-checker__heading">
-
                         <span class="home-checker__badge">
                           In development
                         </span>
@@ -674,24 +673,12 @@ const handleSectionChange = (view) => {
   min-width: 0;
 }
 
-.home-service__eyebrow,
 .home-benefit__title,
-.home-checker__eyebrow,
 .home-checker__badge,
 .home-checker__check {
   font-family: var(--font-mono);
   text-transform: uppercase;
   letter-spacing: 0.09em;
-}
-
-.home-service__eyebrow {
-  display: block;
-  margin-bottom: 2px;
-
-  color: var(--color-graphite);
-
-  font-size: 0.48rem;
-  font-weight: 600;
 }
 
 .home-service__title {
@@ -790,15 +777,16 @@ const handleSectionChange = (view) => {
    ========================================================= */
 
 .home-service__footer {
+  width: 100%;
   margin-top: auto;
 
   display: flex;
   align-items: center;
-  justify-content: flex-end;
 }
 
 .home-service__footer :deep(.bc-button) {
-  flex: 0 0 auto;
+  width: 100%;
+  flex: 1 1 auto;
 }
 
 .home-service__footer :deep(.bc-button--primary) {
@@ -814,13 +802,22 @@ const handleSectionChange = (view) => {
 }
 
 .home-service__footer
-  :deep(.bc-button--primary:hover:not(.bc-button--disabled):not(.bc-button--loading)) {
+  :deep(
+    .bc-button--primary:hover:not(.bc-button--disabled):not(
+      .bc-button--loading
+    )
+  ) {
   color: var(--color-chartreuse);
   background-color: var(--color-on-accent);
 }
 
 .home-service__footer
-  :deep(.bc-button--primary:hover:not(.bc-button--disabled):not(.bc-button--loading) .bc-button__icon) {
+  :deep(
+    .bc-button--primary:hover:not(.bc-button--disabled):not(
+      .bc-button--loading
+    )
+      .bc-button__icon
+  ) {
   color: var(--color-on-accent);
   background-color: var(--color-chartreuse);
 }
@@ -855,6 +852,7 @@ const handleSectionChange = (view) => {
 
 .home-checker:hover {
   transform: translateY(-2px);
+
   box-shadow: 4px 4px 0 var(--color-ink);
 }
 
@@ -886,10 +884,6 @@ const handleSectionChange = (view) => {
   transform: rotate(-4deg) scale(1.04);
 }
 
-.home-checker:hover .home-checker__icon {
-  transform: rotate(-4deg) scale(1.04);
-}
-
 .home-checker__content {
   min-width: 0;
 
@@ -898,19 +892,11 @@ const handleSectionChange = (view) => {
 }
 
 .home-checker__heading {
-  margin-bottom: 3px;
+  margin-bottom: 4px;
 
   display: flex;
   align-items: center;
-  gap: 7px;
   flex-wrap: wrap;
-}
-
-.home-checker__eyebrow {
-  color: var(--color-graphite);
-
-  font-size: 0.43rem;
-  font-weight: 600;
 }
 
 .home-checker__badge {
@@ -1404,10 +1390,6 @@ const handleSectionChange = (view) => {
 
   .home-service__footer {
     margin-top: 0;
-  }
-
-  .home-service__footer :deep(.bc-button) {
-    width: 100%;
   }
 
   .home-checker__form {
