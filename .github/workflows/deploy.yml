@@ -47,4 +47,4 @@ jobs:
           publish_dir: ./Mail4all/frontend/dist
 
           # Esto crea el CNAME en la raíz de la rama 'deploy' CADA VEZ.
-          # cname: mail4all.app
+          cname: mail4all.app
