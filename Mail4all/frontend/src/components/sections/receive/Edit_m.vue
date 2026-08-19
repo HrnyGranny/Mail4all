@@ -1,11 +1,12 @@
 <script setup>
 import {
   computed,
-  nextTick,
   onBeforeUnmount,
   ref,
   watch,
 } from 'vue'
+
+import { faker } from '@faker-js/faker'
 
 import BaseButton from '@/components/ui/BaseButton.vue'
 
@@ -27,16 +28,15 @@ const emit = defineEmits([
 ])
 
 const availableDomains = [
-  '@m4il.tech'
+  '@m4il.tech',
 ]
 
-const emailName = ref('')
+const emailValue = ref('')
 const selectedDomain = ref(availableDomains[0])
 const isGenerating = ref(false)
-const nameInput = ref(null)
 
 const normalizedName = computed(() => {
-  return emailName.value
+  return emailValue.value
     .trim()
     .toLowerCase()
     .replace(/\s+/g, '_')
@@ -61,7 +61,7 @@ const splitCurrentEmail = () => {
   const separatorPosition = currentEmail.lastIndexOf('@')
 
   if (separatorPosition <= 0) {
-    emailName.value = ''
+    emailValue.value = ''
     selectedDomain.value = availableDomains[0]
 
     return
@@ -70,7 +70,7 @@ const splitCurrentEmail = () => {
   const currentName = currentEmail.slice(0, separatorPosition)
   const currentDomain = currentEmail.slice(separatorPosition)
 
-  emailName.value = currentName
+  emailValue.value = currentName
 
   selectedDomain.value = availableDomains.includes(currentDomain)
     ? currentDomain
@@ -85,48 +85,19 @@ const closeModal = () => {
   emit('update:modelValue', false)
 }
 
-const focusNameInput = async () => {
-  await nextTick()
-
-  nameInput.value?.focus()
-  nameInput.value?.select()
-}
-
 const generateRandomName = () => {
-  const adjectives = [
-    'silent',
-    'rapid',
-    'hidden',
-    'bright',
-    'private',
-    'swift',
-    'lucky',
-    'secure',
-  ]
+  const randomUsername = faker.internet
+    .username()
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, '_')
+    .replace(/[^a-z0-9._-]/g, '')
+    .replace(/^[._-]+|[._-]+$/g, '')
+    .slice(0, 64)
 
-  const nouns = [
-    'falcon',
-    'forest',
-    'river',
-    'orbit',
-    'cloud',
-    'pixel',
-    'comet',
-    'signal',
-  ]
-
-  const randomAdjective =
-    adjectives[Math.floor(Math.random() * adjectives.length)]
-
-  const randomNoun =
-    nouns[Math.floor(Math.random() * nouns.length)]
-
-  const randomNumber = Math.floor(100 + Math.random() * 900)
-
-  emailName.value =
-    `${randomAdjective}_${randomNoun}_${randomNumber}`
-
-  focusNameInput()
+  emailValue.value =
+    randomUsername ||
+    `mail_${faker.string.alphanumeric(8).toLowerCase()}`
 }
 
 const handleGenerate = async () => {
@@ -169,7 +140,7 @@ const handleKeydown = (event) => {
 
 watch(
   () => props.modelValue,
-  async (isOpen) => {
+  (isOpen) => {
     if (!isOpen) {
       document.body.style.overflow = ''
       window.removeEventListener('keydown', handleKeydown)
@@ -181,8 +152,6 @@ watch(
 
     document.body.style.overflow = 'hidden'
     window.addEventListener('keydown', handleKeydown)
-
-    await focusNameInput()
   },
 )
 
@@ -221,7 +190,8 @@ onBeforeUnmount(() => {
               </h2>
 
               <p class="edit-modal__description">
-                Configure your new address. This action will permanently delete your current inbox.
+                Configure your new address. This action will permanently
+                delete your current inbox.
               </p>
             </div>
 
@@ -253,8 +223,7 @@ onBeforeUnmount(() => {
               <div class="edit-modal__name-field">
                 <input
                   id="edit-email-name"
-                  ref="nameInput"
-                  v-model="emailName"
+                  v-model="emailValue"
                   class="edit-modal__input"
                   type="text"
                   autocomplete="off"
@@ -281,7 +250,7 @@ onBeforeUnmount(() => {
               </div>
 
               <span
-                v-if="emailName && !normalizedName"
+                v-if="emailValue && !normalizedName"
                 class="edit-modal__validation"
               >
                 Enter at least one valid letter or number.
@@ -528,7 +497,7 @@ onBeforeUnmount(() => {
 }
 
 /* =========================================================
-   TEXT FIELDS
+   FIELDS
    ========================================================= */
 
 .edit-modal__name-field,
