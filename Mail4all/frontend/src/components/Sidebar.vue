@@ -202,42 +202,9 @@ const handleDonate = () => {
           </button>
         </li>
 
-        <!-- About us -->
-        <li class="bc-sidebar__item">
-          <button
-            type="button"
-            class="bc-sidebar__link"
-            :class="{
-              'bc-sidebar__link--active':
-                selectedView === 'about',
-            }"
-            title="About us"
-            :aria-pressed="selectedView === 'about'"
-            @click="handleSectionChange('about')"
-          >
-            <span
-              class="bc-sidebar__icon material-symbols-rounded"
-              aria-hidden="true"
-            >
-              groups
-            </span>
-
-            <span
-              v-if="isExpanded"
-              class="bc-sidebar__link-text"
-            >
-              About us
-            </span>
-
-            <span
-              v-if="isExpanded"
-              class="bc-sidebar__link-index"
-              aria-hidden="true"
-            >
-              04
-            </span>
-          </button>
-        </li>
+        <!-- Section 3 -->
+        <!--<li class="bc-sidebar__item">
+        </li> -->
       </ul>
     </nav>
 
@@ -1051,7 +1018,9 @@ animation: support-heartbeat 650ms ease-in-out;
    ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
-  .bc-sidebar__support:hover .bc-sidebar__support-icon {
+  .bc-sidebar__support:hover .bc-sidebar__support-icon,
+  .bc-sidebar__collapsed-support:hover .material-symbols-rounded,
+  .bc-sidebar__collapsed-support:focus-visible .material-symbols-rounded {
     animation: none;
   }
 }

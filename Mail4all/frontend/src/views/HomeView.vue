@@ -7,7 +7,6 @@ import AppFooter from '@/components/Footer.vue'
 import Home from '@/components/sections/Home.vue'
 import Send from '@/components/sections/send/Send.vue'
 import Receive from '@/components/sections/receive/Receive.vue'
-import AboutUs from '@/components/sections/AboutUs.vue'
 
 const MOBILE_BREAKPOINT = 768
 
@@ -19,7 +18,6 @@ const sectionViews = {
   home: Home,
   send: Send,
   receive: Receive,
-  about: AboutUs,
 }
 
 const currentView = computed(() => {
