@@ -27,9 +27,7 @@ const emit = defineEmits([
 ])
 
 const availableDomains = [
-  '@m4il.tech',
-  '@mail4all.app',
-  '@inbox4all.dev',
+  '@m4il.tech'
 ]
 
 const emailName = ref('')

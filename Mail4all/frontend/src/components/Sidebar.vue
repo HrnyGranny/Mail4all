@@ -8,13 +8,18 @@ defineProps({
     type: Boolean,
     default: true,
   },
+
   selectedView: {
     type: String,
     default: 'home',
   },
 })
 
-const emit = defineEmits(['toggle-sidebar', 'donate', 'select-view'])
+const emit = defineEmits([
+  'toggle-sidebar',
+  'donate',
+  'select-view',
+])
 
 const handleNavigation = () => {
   if (window.innerWidth < 768) {
@@ -91,9 +96,12 @@ const handleDonate = () => {
           <button
             type="button"
             class="bc-sidebar__link"
-            :class="{ 'bc-sidebar__link--active': selectedView === 'home' }"
+            :class="{
+              'bc-sidebar__link--active':
+                selectedView === 'home',
+            }"
             title="Home"
-            aria-pressed="selectedView === 'home'"
+            :aria-pressed="selectedView === 'home'"
             @click="handleSectionChange('home')"
           >
             <span
@@ -125,9 +133,12 @@ const handleDonate = () => {
           <button
             type="button"
             class="bc-sidebar__link"
-            :class="{ 'bc-sidebar__link--active': selectedView === 'send' }"
+            :class="{
+              'bc-sidebar__link--active':
+                selectedView === 'send',
+            }"
             title="Send"
-            aria-pressed="selectedView === 'send'"
+            :aria-pressed="selectedView === 'send'"
             @click="handleSectionChange('send')"
           >
             <span
@@ -159,9 +170,12 @@ const handleDonate = () => {
           <button
             type="button"
             class="bc-sidebar__link"
-            :class="{ 'bc-sidebar__link--active': selectedView === 'receive' }"
+            :class="{
+              'bc-sidebar__link--active':
+                selectedView === 'receive',
+            }"
             title="Receive"
-            aria-pressed="selectedView === 'receive'"
+            :aria-pressed="selectedView === 'receive'"
             @click="handleSectionChange('receive')"
           >
             <span
@@ -193,9 +207,12 @@ const handleDonate = () => {
           <button
             type="button"
             class="bc-sidebar__link"
-            :class="{ 'bc-sidebar__link--active': selectedView === 'about' }"
+            :class="{
+              'bc-sidebar__link--active':
+                selectedView === 'about',
+            }"
             title="About us"
-            aria-pressed="selectedView === 'about'"
+            :aria-pressed="selectedView === 'about'"
             @click="handleSectionChange('about')"
           >
             <span
@@ -239,24 +256,20 @@ const handleDonate = () => {
           </span>
 
           <div class="bc-sidebar__support-heading">
-            <span class="bc-sidebar__support-label">
-              Support me
-            </span>
-
             <strong class="bc-sidebar__support-title">
-              Keep Mail4all alive
+              Support me
             </strong>
+
+            <span class="bc-sidebar__support-subtitle">
+              Help me maintain and improve the project.
+            </span>
           </div>
         </div>
-
-        <p class="bc-sidebar__support-description">
-          Help me maintain and improve the project.
-        </p>
 
         <button
           type="button"
           class="bc-sidebar__donate"
-          aria-label="Donate to support MailTester"
+          aria-label="Donate to support Mail4all"
           @click="handleDonate"
         >
           <span class="bc-sidebar__donate-label">
@@ -270,6 +283,19 @@ const handleDonate = () => {
             arrow_forward
           </span>
         </button>
+
+        <div class="bc-sidebar__payment">
+          <span
+            class="bc-sidebar__payment-icon material-symbols-rounded"
+            aria-hidden="true"
+          >
+            lock
+          </span>
+
+          <span class="bc-sidebar__payment-text">
+            Secure payment via PayPal
+          </span>
+        </div>
       </section>
     </footer>
 
@@ -281,8 +307,8 @@ const handleDonate = () => {
       <button
         type="button"
         class="bc-sidebar__collapsed-support"
-        aria-label="Support MailTester"
-        title="Support us"
+        aria-label="Support Mail4all"
+        title="Support Mail4all"
         @click="handleDonate"
       >
         <span
@@ -313,10 +339,11 @@ const handleDonate = () => {
   color: var(--color-ink);
   background-color: var(--color-bone);
 
-  border: var(--border-width) solid var(--color-ink);
+  border: var(--border-width) solid var(--border-color);
   border-radius: var(--radius-lg);
 
   box-shadow: var(--shadow-sm);
+
   overflow: hidden;
 
   transition:
@@ -348,14 +375,17 @@ const handleDonate = () => {
   gap: 12px;
 
   color: var(--color-ink);
-  background: transparent;
-  text-decoration: none;
-  text-align: left;
+  background-color: transparent;
 
   border: none;
-  border-bottom: var(--border-width) solid var(--color-ink);
+  border-bottom: var(--border-width) solid var(--border-color);
+
+  text-align: left;
+  text-decoration: none;
 
   overflow: hidden;
+
+  appearance: none;
   cursor: pointer;
 
   transition:
@@ -404,8 +434,7 @@ const handleDonate = () => {
 
 .bc-sidebar__eyebrow,
 .bc-sidebar__section-label,
-.bc-sidebar__link-index,
-.bc-sidebar__support-label {
+.bc-sidebar__link-index {
   font-family: var(--font-mono);
   text-transform: uppercase;
   letter-spacing: 0.11em;
@@ -426,6 +455,7 @@ const handleDonate = () => {
 
 .bc-sidebar--collapsed .bc-sidebar__brand {
   padding: 12px;
+
   justify-content: center;
 }
 
@@ -434,7 +464,8 @@ const handleDonate = () => {
    ========================================================= */
 
 .bc-sidebar__navigation {
-  flex: 1;
+  flex: 1 1 auto;
+
   min-height: 0;
   padding: 18px 10px;
 
@@ -478,7 +509,7 @@ const handleDonate = () => {
   background-color: transparent;
 
   border: var(--border-width) solid transparent;
-  border-radius: 14px;
+  border-radius: var(--radius-md);
 
   font-family: var(--font-body);
   text-align: left;
@@ -500,7 +531,7 @@ const handleDonate = () => {
   color: var(--color-ink);
   background-color: var(--color-paper);
 
-  border-color: var(--color-ink);
+  border-color: var(--border-color);
 
   transform: translateX(2px);
 }
@@ -510,12 +541,12 @@ const handleDonate = () => {
 .bc-sidebar__link--active:focus,
 .bc-sidebar__link--active:focus-visible,
 .bc-sidebar__link--active:active {
-  color: #0e0e0c;
-  background-color: #d8ff3d;
+  color: var(--color-on-accent);
+  background-color: var(--color-chartreuse);
 
-  border-color: #0e0e0c;
+  border-color: var(--color-on-accent);
 
-  box-shadow: 3px 3px 0 #0e0e0c;
+  box-shadow: 3px 3px 0 var(--color-on-accent);
 }
 
 .bc-sidebar__icon {
@@ -530,6 +561,7 @@ const handleDonate = () => {
   color: currentColor;
 
   font-size: 22px;
+
   font-variation-settings:
     "FILL" 0,
     "wght" 500,
@@ -540,12 +572,12 @@ const handleDonate = () => {
 }
 
 .bc-sidebar__link--active .bc-sidebar__icon {
-  color: #0e0e0c;
+  color: var(--color-on-accent);
 }
 
 .bc-sidebar__link-text {
   min-width: 0;
-  flex: 1;
+  flex: 1 1 auto;
 
   color: currentColor;
 
@@ -563,16 +595,20 @@ const handleDonate = () => {
   font-size: 0.53rem;
   line-height: 1;
 
-  transition: color var(--transition-fast);
+  transition:
+    color var(--transition-fast),
+    opacity var(--transition-fast);
 }
 
 .bc-sidebar__link--active .bc-sidebar__link-index {
-  color: #0e0e0c;
+  color: var(--color-on-accent);
+
   opacity: 0.7;
 }
 
 .bc-sidebar--collapsed .bc-sidebar__link {
   padding: 8px;
+
   justify-content: center;
 }
 
@@ -595,14 +631,16 @@ const handleDonate = () => {
   flex-direction: column;
   gap: 10px;
 
+  color: var(--color-ink);
   background-color: var(--color-paper);
 
-  border: 1px dashed var(--color-ink);
-  border-radius: 14px;
+  border: var(--border-width) dashed var(--border-color);
+  border-radius: var(--radius-md);
 
   overflow: hidden;
 
   transition:
+    color var(--transition-normal),
     background-color var(--transition-normal),
     border-color var(--transition-normal),
     transform var(--transition-fast),
@@ -611,6 +649,7 @@ const handleDonate = () => {
 
 .bc-sidebar__support:hover {
   transform: translateY(-2px);
+
   box-shadow: 4px 4px 0 var(--color-ink);
 }
 
@@ -619,25 +658,26 @@ const handleDonate = () => {
 
   display: flex;
   align-items: center;
-  gap: 9px;
+  gap: 10px;
 }
 
 .bc-sidebar__support-icon {
-  width: 34px;
-  height: 34px;
-  flex: 0 0 34px;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  color: #0e0e0c;
-  background-color: #ff5a1f;
+  color: var(--color-on-accent);
+  background-color: var(--color-tangerine);
 
-  border: 1px solid #0e0e0c;
+  border: 1px solid var(--color-on-accent);
   border-radius: 10px;
 
   font-size: 20px;
+
   font-variation-settings:
     "FILL" 1,
     "wght" 500,
@@ -677,34 +717,31 @@ const handleDonate = () => {
 
   display: flex;
   flex-direction: column;
-}
-
-.bc-sidebar__support-label {
-  color: var(--color-graphite);
-
-  font-size: 0.48rem;
-  font-weight: 600;
-  line-height: 1.2;
+  gap: 3px;
 }
 
 .bc-sidebar__support-title {
+  min-width: 0;
+
   color: var(--color-ink);
 
-  font-size: 0.7rem;
-  line-height: 1.3;
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
 
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.bc-sidebar__support-description {
-  margin: 0;
+.bc-sidebar__support-subtitle {
+  min-width: 0;
 
   color: var(--color-graphite);
 
-  font-size: 0.65rem;
-  line-height: 1.45;
+  font-size: 0.58rem;
+  line-height: 1.35;
 }
 
 /* =========================================================
@@ -721,10 +758,10 @@ const handleDonate = () => {
   justify-content: space-between;
   gap: 8px;
 
-  color: #0e0e0c;
-  background-color: #d8ff3d;
+  color: var(--color-on-accent);
+  background-color: var(--color-chartreuse);
 
-  border: 1px solid #0e0e0c;
+  border: 1px solid var(--color-on-accent);
   border-radius: var(--radius-pill);
 
   font-family: var(--font-body);
@@ -741,8 +778,8 @@ const handleDonate = () => {
 }
 
 .bc-sidebar__donate:hover {
-  color: #d8ff3d;
-  background-color: #0e0e0c;
+  color: var(--color-chartreuse);
+  background-color: var(--color-on-accent);
 
   transform: translateY(-1px);
 }
@@ -768,8 +805,8 @@ const handleDonate = () => {
   align-items: center;
   justify-content: center;
 
-  color: #d8ff3d;
-  background-color: #0e0e0c;
+  color: var(--color-chartreuse);
+  background-color: var(--color-on-accent);
 
   border-radius: 50%;
 
@@ -782,10 +819,53 @@ const handleDonate = () => {
 }
 
 .bc-sidebar__donate:hover .bc-sidebar__donate-icon {
-  color: #0e0e0c;
-  background-color: #d8ff3d;
+  color: var(--color-on-accent);
+  background-color: var(--color-chartreuse);
 
   transform: translateX(2px);
+}
+
+/* =========================================================
+   SECURE PAYMENT
+   ========================================================= */
+
+.bc-sidebar__payment {
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+
+  color: var(--color-graphite-soft);
+}
+
+.bc-sidebar__payment-icon {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+
+  color: currentColor;
+
+  font-size: 16px;
+
+  font-variation-settings:
+    "FILL" 1,
+    "wght" 500,
+    "GRAD" 0,
+    "opsz" 20;
+}
+
+.bc-sidebar__payment-text {
+  min-width: 0;
+
+  font-size: 0.70rem;
+  font-weight: 500;
+  line-height: 1.3;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* =========================================================
@@ -810,11 +890,11 @@ const handleDonate = () => {
   align-items: center;
   justify-content: center;
 
-  color: #0e0e0c;
-  background-color: #ff5a1f;
+  color: var(--color-on-accent);
+  background-color: var(--color-tangerine);
 
-  border: var(--border-width) solid #0e0e0c;
-  border-radius: 13px;
+  border: var(--border-width) solid var(--color-on-accent);
+  border-radius: var(--radius-md);
 
   appearance: none;
   cursor: pointer;
@@ -827,16 +907,21 @@ const handleDonate = () => {
 }
 
 .bc-sidebar__collapsed-support:hover {
-  color: #d8ff3d;
-  background-color: #0e0e0c;
+  color: var(--color-on-accent);
+  background-color: var(--color-tangerine);
 
   transform: translateY(-2px);
 
-  box-shadow: 3px 3px 0 #d8ff3d;
+  box-shadow: 3px 3px 0 var(--color-ink);
+}
+
+.bc-sidebar__collapsed-support:hover .material-symbols-rounded {
+animation: support-heartbeat 650ms ease-in-out;
 }
 
 .bc-sidebar__collapsed-support:active {
   transform: translateY(0);
+
   box-shadow: none;
 }
 
@@ -849,6 +934,7 @@ const handleDonate = () => {
   justify-content: center;
 
   font-size: 22px;
+
   font-variation-settings:
     "FILL" 1,
     "wght" 500,
@@ -870,7 +956,15 @@ const handleDonate = () => {
     gap: 7px;
   }
 
-  .bc-sidebar__support-description {
+  .bc-sidebar__support-icon {
+    width: 32px;
+    height: 32px;
+    flex-basis: 32px;
+
+    font-size: 18px;
+  }
+
+  .bc-sidebar__support-subtitle {
     display: none;
   }
 
@@ -882,6 +976,20 @@ const handleDonate = () => {
     width: 23px;
     height: 23px;
     flex-basis: 23px;
+  }
+
+  .bc-sidebar__payment-text {
+    font-size: 0.5rem;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .bc-sidebar__support:hover .bc-sidebar__support-icon {
+    animation: none;
   }
 }
 
