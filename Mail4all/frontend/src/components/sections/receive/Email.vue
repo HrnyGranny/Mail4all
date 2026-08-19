@@ -3,6 +3,7 @@ import { computed, onBeforeUnmount, ref, watch } from 'vue'
 
 import BaseButton from '@/components/ui/BaseButton.vue'
 import { copyToClipboard } from '@/assets/js/copyToClipboard.js'
+import EditModal from '@/components/sections/receive/Edit_m.vue'
 
 const props = defineProps({
   email: {
@@ -25,6 +26,7 @@ const emit = defineEmits(['edit', 'share', 'copy'])
 
 const emailValue = ref(props.email)
 const copyState = ref('idle')
+const isEditModalOpen = ref(false)
 
 let copyStateTimeout = null
 
@@ -104,12 +106,13 @@ const handleCopy = async () => {
 }
 
 const handleEdit = () => {
-  /*
-   * TODO:
-   * Open the email customization modal.
-   * The modal will handle validation and the backend update later.
-   */
-  emit('edit', emailValue.value)
+  isEditModalOpen.value = true
+}
+
+const handleEmailGenerated = (generatedEmail) => {
+  emailValue.value = generatedEmail
+
+  emit('edit', generatedEmail)
 }
 
 const handleShare = () => {
@@ -256,6 +259,11 @@ onBeforeUnmount(() => {
         Share
       </BaseButton>
     </footer>
+    <EditModal
+      v-model="isEditModalOpen"
+      :current-email="emailValue"
+      @generate="handleEmailGenerated"
+    />
   </article>
 </template>
 
