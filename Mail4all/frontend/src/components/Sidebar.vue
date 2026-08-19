@@ -284,16 +284,51 @@ const handleDonate = () => {
           </span>
         </button>
 
-        <div class="bc-sidebar__payment">
-          <span
-            class="bc-sidebar__payment-icon material-symbols-rounded"
-            aria-hidden="true"
-          >
-            lock
+        <div
+          class="bc-sidebar__support-values"
+          aria-label="Project values"
+        >
+          <span class="bc-sidebar__support-value">
+            <span
+              class="material-symbols-rounded"
+              aria-hidden="true"
+            >
+              block
+            </span>
+
+            No ads
           </span>
 
-          <span class="bc-sidebar__payment-text">
-            Secure payment via PayPal
+          <span
+            class="bc-sidebar__support-value-separator"
+            aria-hidden="true"
+          ></span>
+
+          <span class="bc-sidebar__support-value">
+            <span
+              class="material-symbols-rounded"
+              aria-hidden="true"
+            >
+              visibility_off
+            </span>
+
+            No tracking
+          </span>
+
+          <span
+            class="bc-sidebar__support-value-separator"
+            aria-hidden="true"
+          ></span>
+
+          <span class="bc-sidebar__support-value">
+            <span
+              class="material-symbols-rounded"
+              aria-hidden="true"
+            >
+              favorite
+            </span>
+
+            Independent
           </span>
         </div>
       </section>
@@ -826,46 +861,74 @@ const handleDonate = () => {
 }
 
 /* =========================================================
-   SECURE PAYMENT
+   SUPPORT VALUES
    ========================================================= */
 
-.bc-sidebar__payment {
+.bc-sidebar__support-values {
+  width: 100%;
   min-width: 0;
+  padding-top: 1px;
 
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 3px;
+  justify-content: space-between;
+  gap: 5px;
 
   color: var(--color-graphite-soft);
 }
 
-.bc-sidebar__payment-icon {
-  width: 16px;
-  height: 16px;
-  flex: 0 0 16px;
+.bc-sidebar__support-value {
+  min-width: 0;
 
-  color: currentColor;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
 
-  font-size: 16px;
+  font-family: var(--font-mono);
+  font-size: 0.43rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.bc-sidebar__support-value .material-symbols-rounded {
+  width: 13px;
+  height: 13px;
+  flex: 0 0 13px;
+
+  color: var(--color-graphite);
+
+  font-size: 13px;
 
   font-variation-settings:
-    "FILL" 1,
-    "wght" 500,
+    "FILL" 0,
+    "wght" 600,
     "GRAD" 0,
     "opsz" 20;
 }
 
-.bc-sidebar__payment-text {
-  min-width: 0;
+.bc-sidebar__support-value:last-child .material-symbols-rounded {
+  color: var(--color-tangerine);
 
-  font-size: 0.70rem;
-  font-weight: 500;
-  line-height: 1.3;
+  font-variation-settings:
+    "FILL" 1,
+    "wght" 600,
+    "GRAD" 0,
+    "opsz" 20;
+}
 
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.bc-sidebar__support-value-separator {
+  width: 3px;
+  height: 3px;
+  flex: 0 0 3px;
+
+  background-color: var(--color-graphite-soft);
+
+  border-radius: 50%;
+
+  opacity: 0.55;
 }
 
 /* =========================================================
@@ -978,8 +1041,8 @@ animation: support-heartbeat 650ms ease-in-out;
     flex-basis: 23px;
   }
 
-  .bc-sidebar__payment-text {
-    font-size: 0.5rem;
+ .bc-sidebar__support-values {
+    display: none;
   }
 }
 
