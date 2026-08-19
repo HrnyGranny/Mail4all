@@ -473,50 +473,86 @@ const handleSectionChange = (view) => {
    ========================================================= */
 
 .home-guarantees {
+  position: relative;
+
   min-width: 0;
-  padding: 13px;
+  padding: 10px;
 
-  color: #f2eee5;
-  background-color: var(--color-on-accent);
+  color: var(--color-ink);
+  background-color: var(--color-paper);
 
-  border: var(--border-width) solid var(--color-on-accent);
+  border: var(--border-width) solid var(--border-color);
   border-radius: var(--radius-lg);
 
-  box-shadow: 5px 5px 0 var(--color-tangerine);
+  box-shadow: var(--shadow-xs);
+
+  overflow: hidden;
+
+  transition:
+    color var(--transition-normal),
+    background-color var(--transition-normal),
+    border-color var(--transition-normal);
+}
+
+.home-guarantees::before {
+  content: "";
+
+  position: absolute;
+  top: 0;
+  right: 18px;
+  left: 18px;
+
+  height: 3px;
+
+  background-color: var(--color-chartreuse);
+
+  border-right: 1px solid var(--color-on-accent);
+  border-bottom: 1px solid var(--color-on-accent);
+  border-left: 1px solid var(--color-on-accent);
+  border-radius: 0 0 var(--radius-pill) var(--radius-pill);
 }
 
 .home-guarantee {
   width: 100%;
   min-width: 0;
-  min-height: 42px;
-  padding: 5px 9px;
+  min-height: 48px;
+  padding: 7px 10px;
 
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 9px;
+
+  color: var(--color-ink);
 }
 
 .home-guarantee--bordered {
-  border-left: 1px solid rgba(242, 238, 229, 0.22);
+  border-left: 1px solid var(--color-line);
 }
 
 .home-guarantee__icon {
-  width: 30px;
-  height: 30px;
-  flex: 0 0 30px;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
 
   color: var(--color-on-accent);
   background-color: var(--color-chartreuse);
 
-  border-radius: 9px;
+  border: 1px solid var(--color-on-accent);
+  border-radius: 10px;
 
-  font-size: 16px;
+  font-size: 18px;
 
   font-variation-settings:
     "FILL" 0,
-    "wght" 500,
+    "wght" 600,
     "GRAD" 0,
     "opsz" 20;
+
+  transition: transform var(--transition-fast);
+}
+
+.home-guarantee:hover .home-guarantee__icon {
+  transform: rotate(-4deg) scale(1.04);
 }
 
 .home-guarantee__content {
@@ -528,18 +564,18 @@ const handleSectionChange = (view) => {
 }
 
 .home-guarantee__content strong {
-  color: #f2eee5;
+  color: var(--color-ink);
 
-  font-size: 0.66rem;
+  font-size: 0.68rem;
   line-height: 1.2;
   white-space: nowrap;
 }
 
 .home-guarantee__content span {
-  color: rgba(242, 238, 229, 0.62);
+  color: var(--color-graphite);
 
   font-family: var(--font-mono);
-  font-size: 0.39rem;
+  font-size: 0.4rem;
   font-weight: 600;
   line-height: 1.35;
   letter-spacing: 0.07em;
@@ -766,7 +802,7 @@ const handleSectionChange = (view) => {
 
   color: var(--color-ink);
 
-  font-size: 0.58rem;
+  font-size: 0.67rem;
   font-weight: 700;
   line-height: 1.25;
   letter-spacing: 0.07em;
@@ -1073,11 +1109,20 @@ const handleSectionChange = (view) => {
   }
 
   .home-guarantees {
-    padding: 9px;
+    padding: 7px;
   }
 
   .home-guarantee {
     min-height: 36px;
+    padding: 4px 7px;
+  }
+
+  .home-guarantee__icon {
+    width: 30px;
+    height: 30px;
+    flex-basis: 30px;
+
+    font-size: 16px;
   }
 
   .home-services {
@@ -1117,7 +1162,7 @@ const handleSectionChange = (view) => {
   }
 
   .home-benefit__title {
-    font-size: 0.52rem;
+    font-size: 0.6rem;
   }
 
   .home-checker {
@@ -1229,7 +1274,7 @@ const handleSectionChange = (view) => {
   }
 
   .home-benefit__title {
-    font-size: 0.52rem;
+    font-size: 0.6rem;
   }
 
   .home-checker__checks {
@@ -1247,11 +1292,11 @@ const handleSectionChange = (view) => {
   }
 
   .home-guarantees {
-    padding: 10px;
+    padding: 8px;
   }
 
   .home-guarantee {
-    padding: 4px 7px;
+    padding: 5px 7px;
 
     flex-direction: column;
     align-items: flex-start;
@@ -1291,7 +1336,7 @@ const handleSectionChange = (view) => {
   }
 
   .home-benefit__title {
-    font-size: 0.52rem;
+    font-size: 0.6rem;
     line-height: 1.2;
   }
 
@@ -1318,7 +1363,12 @@ const handleSectionChange = (view) => {
   }
 
   .home-guarantees {
-    padding: 9px;
+    padding: 8px;
+  }
+
+  .home-guarantees::before {
+    right: 14px;
+    left: 14px;
   }
 
   .home-guarantee {
@@ -1366,7 +1416,7 @@ const handleSectionChange = (view) => {
     padding: 7px 8px;
 
     display: grid;
-    grid-template-columns: 26px minmax(0, 1fr);
+    grid-template-columns: 30px minmax(0, 1fr);
     align-items: center;
     gap: 7px;
   }
@@ -1383,7 +1433,7 @@ const handleSectionChange = (view) => {
   .home-benefit__title {
     min-width: 0;
 
-    font-size: 0.48rem;
+    font-size: 0.55rem;
     line-height: 1.2;
     overflow-wrap: anywhere;
   }
