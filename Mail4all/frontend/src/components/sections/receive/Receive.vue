@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 
+import Api from '@/components/sections/receive/Api.vue'
 import Email from '@/components/sections/receive/Email.vue'
 import Graph from '@/components/sections/receive/Graph.vue'
 import Inbox from '@/components/sections/receive/Inbox.vue'
@@ -57,12 +58,14 @@ const handleShareEmail = (email) => {
           <span
             class="receive-mode__slider"
             :class="{
-              'receive-mode__slider--api': activeMode === MODES.API,
+              'receive-mode__slider--api':
+                activeMode === MODES.API,
             }"
             aria-hidden="true"
           ></span>
 
           <button
+            id="receive-base-tab"
             type="button"
             class="receive-mode__option"
             :class="{
@@ -72,6 +75,7 @@ const handleShareEmail = (email) => {
             role="tab"
             :aria-selected="activeMode === MODES.BASE"
             aria-controls="receive-mode-panel"
+            :tabindex="activeMode === MODES.BASE ? 0 : -1"
             @click="selectMode(MODES.BASE)"
           >
             <span
@@ -85,6 +89,7 @@ const handleShareEmail = (email) => {
           </button>
 
           <button
+            id="receive-api-tab"
             type="button"
             class="receive-mode__option"
             :class="{
@@ -94,6 +99,7 @@ const handleShareEmail = (email) => {
             role="tab"
             :aria-selected="activeMode === MODES.API"
             aria-controls="receive-mode-panel"
+            :tabindex="activeMode === MODES.API ? 0 : -1"
             @click="selectMode(MODES.API)"
           >
             <span
@@ -113,20 +119,42 @@ const handleShareEmail = (email) => {
         class="receive-content"
         role="tabpanel"
         tabindex="0"
+        :aria-labelledby="
+          activeMode === MODES.BASE
+            ? 'receive-base-tab'
+            : 'receive-api-tab'
+        "
         :aria-label="`${activeModeLabel} receive mode`"
       >
-        <div class="receive-content__top">
-          <Email
-            class="receive-content__email"
-            email="demo@mail4all.app"
-            @edit="handleEditEmail"
-            @share="handleShareEmail"
+        <Transition
+          name="receive-view"
+          mode="out-in"
+        >
+          <div
+            v-if="activeMode === MODES.BASE"
+            key="base"
+            class="receive-base"
+          >
+            <div class="receive-base__top">
+              <Email
+                class="receive-base__email"
+                email="demo@mail4all.app"
+                @edit="handleEditEmail"
+                @share="handleShareEmail"
+              />
+
+              <Graph class="receive-base__graph" />
+            </div>
+
+            <Inbox class="receive-base__inbox" />
+          </div>
+
+          <Api
+            v-else
+            key="api"
+            class="receive-api"
           />
-
-          <Graph class="receive-content__graph" />
-        </div>
-
-        <Inbox class="receive-content__inbox" />
+        </Transition>
       </div>
     </article>
   </section>
@@ -342,10 +370,12 @@ const handleShareEmail = (email) => {
 }
 
 /* =========================================================
-   CONTENT
+   CONTENT PANEL
    ========================================================= */
 
 .receive-content {
+  position: relative;
+
   flex: 1 1 auto;
 
   width: 100%;
@@ -353,16 +383,27 @@ const handleShareEmail = (email) => {
   min-height: 0;
   padding: clamp(14px, 1.8vw, 22px);
 
-  display: grid;
-  grid-template-rows: minmax(165px, 1fr) minmax(0, 2fr);
-  gap: clamp(12px, 1.4vw, 18px);
-
   background-color: var(--color-bone);
 
   overflow: hidden;
 }
 
-.receive-content__top {
+/* =========================================================
+   BASE VIEW
+   ========================================================= */
+
+.receive-base {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+
+  display: grid;
+  grid-template-rows: minmax(165px, 1fr) minmax(0, 2fr);
+  gap: clamp(12px, 1.4vw, 18px);
+}
+
+.receive-base__top {
   width: 100%;
   min-width: 0;
   min-height: 0;
@@ -372,11 +413,35 @@ const handleShareEmail = (email) => {
   gap: clamp(12px, 1.4vw, 18px);
 }
 
-.receive-content__email,
-.receive-content__graph,
-.receive-content__inbox {
+.receive-base__email,
+.receive-base__graph,
+.receive-base__inbox,
+.receive-api {
   min-width: 0;
   min-height: 0;
+}
+
+/* =========================================================
+   VIEW TRANSITION
+   ========================================================= */
+
+.receive-view-enter-active,
+.receive-view-leave-active {
+  transition:
+    opacity 180ms var(--ease-boldcase),
+    transform 180ms var(--ease-boldcase);
+}
+
+.receive-view-enter-from {
+  opacity: 0;
+
+  transform: translateY(8px);
+}
+
+.receive-view-leave-to {
+  opacity: 0;
+
+  transform: translateY(-8px);
 }
 
 /* =========================================================
@@ -414,12 +479,14 @@ const handleShareEmail = (email) => {
 
   .receive-content {
     padding: 12px;
+  }
 
+  .receive-base {
     grid-template-rows: minmax(140px, 1fr) minmax(0, 2fr);
     gap: 10px;
   }
 
-  .receive-content__top {
+  .receive-base__top {
     gap: 10px;
   }
 }
@@ -471,20 +538,29 @@ const handleShareEmail = (email) => {
     height: auto;
     min-height: 680px;
 
-    grid-template-rows: 200px minmax(400px, auto);
-
     overflow: visible;
   }
 
-  .receive-content__top {
+  .receive-base {
+    height: auto;
+    min-height: 640px;
+
+    grid-template-rows: 200px minmax(400px, auto);
+  }
+
+  .receive-base__top {
     height: 200px;
     min-height: 200px;
 
     grid-template-columns: minmax(220px, 1fr) minmax(0, 2fr);
   }
 
-  .receive-content__inbox {
+  .receive-base__inbox {
     min-height: 400px;
+  }
+
+  .receive-api {
+    min-height: 640px;
   }
 }
 
@@ -525,14 +601,20 @@ const handleShareEmail = (email) => {
     min-height: 0;
     padding: 14px;
 
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-
     overflow: visible;
   }
 
-  .receive-content__top {
+  .receive-base {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .receive-base__top {
     width: 100%;
     height: auto;
     min-height: 0;
@@ -543,25 +625,31 @@ const handleShareEmail = (email) => {
     gap: 14px;
   }
 
-  .receive-content__email {
+  .receive-base__email {
     width: 100%;
     height: auto;
     min-height: 170px;
     flex: 0 0 auto;
   }
 
-  .receive-content__graph {
+  .receive-base__graph {
     width: 100%;
     height: auto;
     min-height: 230px;
     flex: 0 0 auto;
   }
 
-  .receive-content__inbox {
+  .receive-base__inbox {
     width: 100%;
     height: auto;
     min-height: 480px;
     flex: 0 0 auto;
+  }
+
+  .receive-api {
+    width: 100%;
+    height: auto;
+    min-height: 560px;
   }
 }
 
@@ -604,24 +692,48 @@ const handleShareEmail = (email) => {
 
   .receive-content {
     padding: 11px;
+  }
 
+  .receive-base {
     gap: 11px;
   }
 
-  .receive-content__top {
+  .receive-base__top {
     gap: 11px;
   }
 
-  .receive-content__email {
+  .receive-base__email {
     min-height: 165px;
   }
 
-  .receive-content__graph {
+  .receive-base__graph {
     min-height: 220px;
   }
 
-  .receive-content__inbox {
+  .receive-base__inbox {
     min-height: 470px;
+  }
+
+  .receive-api {
+    min-height: 520px;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .receive-view-enter-active,
+  .receive-view-leave-active {
+    transition: none;
+  }
+
+  .receive-view-enter-from,
+  .receive-view-leave-to {
+    opacity: 1;
+
+    transform: none;
   }
 }
 </style>
