@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const { Schema, model } = mongoose;
+const { receiveDb } = require('../db'); 
+const { Schema } = mongoose;
 
 const EmailSchema = new Schema({
     address: { type: String, required: true, unique: true },     // Unique email address assigned to the mailbox
@@ -27,4 +28,5 @@ const EmailSchema = new Schema({
 // TTL index: MongoDB auto-deletes document when expiresAt is reached
 EmailSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
-module.exports = model("Email", EmailSchema, "Emails");
+// MongoDB Atlas --> db.js
+module.exports = receiveDb.model("Email", EmailSchema, "Emails");
