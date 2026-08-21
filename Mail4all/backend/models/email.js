@@ -29,4 +29,4 @@ const EmailSchema = new Schema({
 EmailSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 // MongoDB Atlas --> db.js
-module.exports = receiveDb.model("Email", EmailSchema, "Emails");
+module.exports = receiveDb.model("Email", EmailSchema, "Inbox");

@@ -10,6 +10,7 @@ const router = express.Router();
 // ==========================================
 router.post('/receive', async (req, res) => {
     try {
+        console.log('Webhook recibido:', req.body);
         // Validación básica de seguridad desde el worker
         if (req.headers['x-cf-secret'] !== 'secreto_cf') {
             return res.status(403).json({ error: "No autorizado" });
