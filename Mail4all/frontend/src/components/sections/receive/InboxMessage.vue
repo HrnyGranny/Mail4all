@@ -57,9 +57,11 @@ const handleOpen = () => {
       ></span>
 
       <span class="inbox-message__content">
-        <strong class="inbox-message__subject">
-          {{ subject }}
-        </strong>
+        <span class="inbox-message__subject-row">
+          <strong class="inbox-message__subject">
+            {{ subject }}
+          </strong>
+        </span>
 
         <span class="inbox-message__sender">
           {{ sender }}
@@ -125,7 +127,7 @@ const handleOpen = () => {
   width: 100%;
   min-width: 0;
   min-height: 78px;
-  padding: 13px 14px 13px 20px;
+  padding: 17px 14px 17px 20px;
 
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
@@ -149,20 +151,19 @@ const handleOpen = () => {
 
 .inbox-message__status-line {
   position: absolute;
-  top: 11px;
-  bottom: 11px;
-  left: 7px;
+  top: 0;
+  bottom: 0;
+  left: 0;
 
-  width: 4px;
+  width: 5px;
 
   background-color: var(--color-graphite-soft);
 
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-pill);
+  border-right: 1px solid var(--border-color);
 
   transition:
     background-color var(--transition-fast),
-    transform var(--transition-fast);
+    width var(--transition-fast);
 }
 
 .inbox-message--unread .inbox-message__status-line {
@@ -173,8 +174,9 @@ const handleOpen = () => {
   background-color: var(--color-graphite-soft);
 }
 
-.inbox-message:hover .inbox-message__status-line {
-  transform: scaleY(1.08);
+.inbox-message:hover .inbox-message__status-line,
+.inbox-message:focus-within .inbox-message__status-line {
+  width: 7px;
 }
 
 /* =========================================================
@@ -186,8 +188,20 @@ const handleOpen = () => {
 
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  justify-content: flex-start;
+  gap: 1px;
 }
+
+.inbox-message__subject-row {
+  min-width: 0;
+
+  display: flex;
+  align-items: flex-start;
+}
+
+/* =========================================================
+   SUBJECT
+   ========================================================= */
 
 .inbox-message__subject {
   min-width: 0;
@@ -209,13 +223,18 @@ const handleOpen = () => {
 }
 
 .inbox-message--read .inbox-message__subject {
-  font-weight: 700;
+  color: var(--color-graphite);
 
-  opacity: 0.82;
+  font-weight: 700;
 }
+
+/* =========================================================
+   SENDER
+   ========================================================= */
 
 .inbox-message__sender {
   min-width: 0;
+  padding-left: 0;
 
   color: var(--color-graphite);
 
@@ -233,7 +252,9 @@ const handleOpen = () => {
 }
 
 .inbox-message--read .inbox-message__sender {
-  opacity: 0.78;
+  color: var(--color-graphite-soft);
+
+  opacity: 0.82;
 }
 
 /* =========================================================
@@ -259,6 +280,8 @@ const handleOpen = () => {
 }
 
 .inbox-message--read .inbox-message__date {
+  color: var(--color-graphite);
+
   opacity: 0.72;
 }
 
@@ -281,21 +304,22 @@ const handleOpen = () => {
 @media (max-width: 575.98px) {
   .inbox-message__button {
     min-height: 74px;
-    padding: 12px 11px 12px 18px;
+    padding: 15px 11px 15px 18px;
 
     gap: 7px;
   }
 
   .inbox-message__status-line {
-    top: 10px;
-    bottom: 10px;
-    left: 6px;
+    width: 4px;
+  }
 
-    width: 3px;
+  .inbox-message:hover .inbox-message__status-line,
+  .inbox-message:focus-within .inbox-message__status-line {
+    width: 6px;
   }
 
   .inbox-message__content {
-    gap: 4px;
+    gap: 1px;
   }
 
   .inbox-message__subject {
@@ -303,6 +327,8 @@ const handleOpen = () => {
   }
 
   .inbox-message__sender {
+    padding-left: 0;
+
     font-size: 0.61rem;
   }
 
@@ -347,9 +373,13 @@ const handleOpen = () => {
   }
 
   .inbox-message:hover,
-  .inbox-message:focus-within,
-  .inbox-message:hover .inbox-message__status-line {
+  .inbox-message:focus-within {
     transform: none;
+  }
+
+  .inbox-message:hover .inbox-message__status-line,
+  .inbox-message:focus-within .inbox-message__status-line {
+    width: 5px;
   }
 }
 </style>

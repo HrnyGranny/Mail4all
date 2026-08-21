@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue'
 
 import InboxMessage from '@/components/sections/receive/InboxMessage.vue'
+import InboxOpened from '@/components/sections/receive/InboxOpened.vue'
 
 /*
  * Mensaje temporal para desarrollar y ajustar la interfaz.
@@ -18,10 +19,11 @@ const exampleMessages = [
     preview:
       'Your temporary inbox is active and ready to receive new messages.',
     receivedTime: 'Now',
+    receivedDate: '21 August 2026 at 11:36',
     receivedAt: new Date().toISOString(),
     read: false,
     body:
-      'Your temporary inbox is active and ready to receive new messages.',
+      'Your temporary inbox is active and ready to receive new messages.\n\nNew messages sent to your temporary address will appear automatically inside this inbox.\n\nThis is an example message used to develop and adjust the opened email interface.',
   },
 ]
 
@@ -64,8 +66,6 @@ const loadMessages = async () => {
      *
      * La lógica para cargar los mensajes permanecerá en Inbox.vue.
      *
-     * Ejemplo futuro:
-     *
      * const response = await fetch(
      *   `/api/inbox?email=${encodeURIComponent(email)}`,
      * )
@@ -76,10 +76,6 @@ const loadMessages = async () => {
      *
      * const data = await response.json()
      * messages.value = data.messages || []
-     *
-     * Cuando se conecte el backend, eliminar:
-     *
-     * messages.value = exampleMessages
      */
 
     messages.value = exampleMessages
@@ -94,21 +90,79 @@ const loadMessages = async () => {
 }
 
 const handleOpenMessage = (message) => {
-  selectedMessage.value = message
-
   const storedMessage = messages.value.find(
     (currentMessage) => currentMessage.id === message.id,
   )
 
   if (storedMessage) {
     storedMessage.read = true
+    selectedMessage.value = storedMessage
+
+    return
   }
 
+  selectedMessage.value = {
+    ...message,
+    read: true,
+  }
+}
+
+const handleCloseMessage = () => {
+  selectedMessage.value = null
+}
+
+const handleDownloadMessage = (message) => {
   /*
-   * TODO:
-   * Abrir aquí el modal o panel con el contenido completo del correo.
+   * TODO: backend integration
+   *
+   * Sustituir la descarga local por el archivo original
+   * devuelto por el backend.
    */
-  console.info('Open inbox message:', message)
+
+  const content = [
+    `Subject: ${message.subject || 'No subject'}`,
+    `From: ${message.senderEmail || message.senderName || 'Unknown sender'}`,
+    `Date: ${message.receivedDate || message.receivedTime || ''}`,
+    '',
+    message.body || message.preview || '',
+  ].join('\n')
+
+  const blob = new Blob(
+    [content],
+    {
+      type: 'text/plain;charset=utf-8',
+    },
+  )
+
+  const downloadUrl = URL.createObjectURL(blob)
+  const downloadLink = document.createElement('a')
+
+  downloadLink.href = downloadUrl
+  downloadLink.download = `mail4all-message-${message.id || 'email'}.txt`
+
+  document.body.appendChild(downloadLink)
+  downloadLink.click()
+  downloadLink.remove()
+
+  URL.revokeObjectURL(downloadUrl)
+}
+
+const handleDeleteMessage = (message) => {
+  /*
+   * TODO: backend integration
+   *
+   * Antes de modificar el estado local:
+   *
+   * await fetch(`/api/messages/${message.id}`, {
+   *   method: 'DELETE',
+   * })
+   */
+
+  messages.value = messages.value.filter(
+    (currentMessage) => currentMessage.id !== message.id,
+  )
+
+  selectedMessage.value = null
 }
 
 const handleRetry = () => {
@@ -117,174 +171,192 @@ const handleRetry = () => {
 </script>
 
 <template>
-  <article class="receive-inbox">
-    <header class="receive-inbox__header">
-      <div class="receive-inbox__heading">
-        <span class="receive-inbox__eyebrow">
-          Incoming messages
-        </span>
+  <Transition
+    name="inbox-view"
+    mode="out-in"
+  >
+    <InboxOpened
+      v-if="selectedMessage"
+      key="opened-message"
+      :message="selectedMessage"
+      @back="handleCloseMessage"
+      @download="handleDownloadMessage"
+      @delete="handleDeleteMessage"
+    />
 
-        <h2 class="receive-inbox__title">
-          Inbox
-        </h2>
-      </div>
-
-      <span
-        class="receive-inbox__counter"
-        :aria-label="counterLabel"
-      >
-        {{ formattedMessageCount }}
-      </span>
-    </header>
-
-    <div
-      class="receive-inbox__body"
-      :class="{
-        'receive-inbox__body--with-messages': hasMessages,
-      }"
+    <article
+      v-else
+      key="inbox-list"
+      class="receive-inbox"
     >
-      <!-- Loading state -->
-      <div
-        v-if="loading && !hasMessages"
-        class="receive-inbox__empty"
-      >
-        <div
-          class="receive-inbox__waiting"
-          aria-hidden="true"
-        >
-          <span
-            class="receive-inbox__empty-icon receive-inbox__empty-icon--loading material-symbols-rounded"
-          >
-            sync
+      <header class="receive-inbox__header">
+        <div class="receive-inbox__heading">
+          <span class="receive-inbox__eyebrow">
+            Incoming messages
           </span>
+
+          <h2 class="receive-inbox__title">
+            Inbox
+          </h2>
         </div>
 
-        <div class="receive-inbox__empty-content">
-          <strong>Loading inbox</strong>
+        <span
+          class="receive-inbox__counter"
+          :aria-label="counterLabel"
+        >
+          {{ formattedMessageCount }}
+        </span>
+      </header>
 
-          <span>
-            Checking for incoming messages.
-          </span>
-
-          <span
-            class="receive-inbox__waiting-label"
-            aria-label="Loading incoming emails"
+      <div
+        class="receive-inbox__body"
+        :class="{
+          'receive-inbox__body--with-messages': hasMessages,
+        }"
+      >
+        <!-- Loading state -->
+        <div
+          v-if="loading && !hasMessages"
+          class="receive-inbox__empty"
+        >
+          <div
+            class="receive-inbox__waiting"
+            aria-hidden="true"
           >
-            Loading
+            <span
+              class="receive-inbox__empty-icon receive-inbox__empty-icon--loading material-symbols-rounded"
+            >
+              sync
+            </span>
+          </div>
+
+          <div class="receive-inbox__empty-content">
+            <strong>Loading inbox</strong>
+
+            <span>
+              Checking for incoming messages.
+            </span>
 
             <span
-              class="receive-inbox__waiting-dots"
-              aria-hidden="true"
+              class="receive-inbox__waiting-label"
+              aria-label="Loading incoming emails"
             >
-              <span></span>
-              <span></span>
-              <span></span>
+              Loading
+
+              <span
+                class="receive-inbox__waiting-dots"
+                aria-hidden="true"
+              >
+                <span></span>
+                <span></span>
+                <span></span>
+              </span>
             </span>
-          </span>
+          </div>
         </div>
-      </div>
 
-      <!-- Error state -->
-      <div
-        v-else-if="error"
-        class="receive-inbox__empty"
-      >
+        <!-- Error state -->
         <div
-          class="receive-inbox__waiting"
-          aria-hidden="true"
+          v-else-if="error"
+          class="receive-inbox__empty"
         >
-          <span
-            class="receive-inbox__empty-icon receive-inbox__empty-icon--error material-symbols-rounded"
+          <div
+            class="receive-inbox__waiting"
+            aria-hidden="true"
           >
-            cloud_off
-          </span>
+            <span
+              class="receive-inbox__empty-icon receive-inbox__empty-icon--error material-symbols-rounded"
+            >
+              cloud_off
+            </span>
+          </div>
+
+          <div class="receive-inbox__empty-content">
+            <strong>Inbox unavailable</strong>
+
+            <span>
+              {{ error }}
+            </span>
+
+            <button
+              type="button"
+              class="receive-inbox__retry"
+              @click="handleRetry"
+            >
+              Try again
+            </button>
+          </div>
         </div>
 
-        <div class="receive-inbox__empty-content">
-          <strong>Inbox unavailable</strong>
-
-          <span>
-            {{ error }}
-          </span>
-
-          <button
-            type="button"
-            class="receive-inbox__retry"
-            @click="handleRetry"
-          >
-            Try again
-          </button>
-        </div>
-      </div>
-
-      <!-- Empty state -->
-      <div
-        v-else-if="!hasMessages"
-        class="receive-inbox__empty"
-      >
+        <!-- Empty state -->
         <div
-          class="receive-inbox__waiting"
-          aria-hidden="true"
+          v-else-if="!hasMessages"
+          class="receive-inbox__empty"
         >
-          <span
-            class="receive-inbox__empty-icon material-symbols-rounded"
+          <div
+            class="receive-inbox__waiting"
+            aria-hidden="true"
           >
-            inbox
-          </span>
-
-          <span
-            class="receive-inbox__signal receive-inbox__signal--one"
-          ></span>
-
-          <span
-            class="receive-inbox__signal receive-inbox__signal--two"
-          ></span>
-
-          <span
-            class="receive-inbox__signal receive-inbox__signal--three"
-          ></span>
-        </div>
-
-        <div class="receive-inbox__empty-content">
-          <strong>Waiting for emails</strong>
-
-          <span>
-            New messages will appear here automatically.
-          </span>
-
-          <span
-            class="receive-inbox__waiting-label"
-            aria-label="Waiting for incoming emails"
-          >
-            Listening
+            <span
+              class="receive-inbox__empty-icon material-symbols-rounded"
+            >
+              inbox
+            </span>
 
             <span
-              class="receive-inbox__waiting-dots"
-              aria-hidden="true"
-            >
-              <span></span>
-              <span></span>
-              <span></span>
+              class="receive-inbox__signal receive-inbox__signal--one"
+            ></span>
+
+            <span
+              class="receive-inbox__signal receive-inbox__signal--two"
+            ></span>
+
+            <span
+              class="receive-inbox__signal receive-inbox__signal--three"
+            ></span>
+          </div>
+
+          <div class="receive-inbox__empty-content">
+            <strong>Waiting for emails</strong>
+
+            <span>
+              New messages will appear here automatically.
             </span>
-          </span>
+
+            <span
+              class="receive-inbox__waiting-label"
+              aria-label="Waiting for incoming emails"
+            >
+              Listening
+
+              <span
+                class="receive-inbox__waiting-dots"
+                aria-hidden="true"
+              >
+                <span></span>
+                <span></span>
+                <span></span>
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Messages -->
+        <div
+          v-else
+          class="receive-inbox__list"
+          aria-label="Received emails"
+        >
+          <InboxMessage
+            v-for="message in messages"
+            :key="message.id"
+            :message="message"
+            @open="handleOpenMessage"
+          />
         </div>
       </div>
-
-      <!-- Messages -->
-      <div
-        v-else
-        class="receive-inbox__list"
-        aria-label="Received emails"
-      >
-        <InboxMessage
-          v-for="message in messages"
-          :key="message.id"
-          :message="message"
-          @open="handleOpenMessage"
-        />
-      </div>
-    </div>
-  </article>
+    </article>
+  </Transition>
 </template>
 
 <style scoped>
@@ -517,11 +589,7 @@ const handleRetry = () => {
     transform: scale(0.72);
   }
 
-  65% {
-    opacity: 0;
-    transform: scale(1.35);
-  }
-
+  65%,
   100% {
     opacity: 0;
     transform: scale(1.35);
@@ -662,6 +730,29 @@ const handleRetry = () => {
 }
 
 /* =========================================================
+   VIEW TRANSITION
+   ========================================================= */
+
+.inbox-view-enter-active,
+.inbox-view-leave-active {
+  transition:
+    opacity var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.inbox-view-enter-from {
+  opacity: 0;
+
+  transform: translateX(8px);
+}
+
+.inbox-view-leave-to {
+  opacity: 0;
+
+  transform: translateX(-8px);
+}
+
+/* =========================================================
    LOW HEIGHT
    ========================================================= */
 
@@ -783,6 +874,18 @@ const handleRetry = () => {
 
   .receive-inbox__waiting-dots span {
     opacity: 1;
+  }
+
+  .inbox-view-enter-active,
+  .inbox-view-leave-active {
+    transition: none;
+  }
+
+  .inbox-view-enter-from,
+  .inbox-view-leave-to {
+    opacity: 1;
+
+    transform: none;
   }
 }
 </style>
